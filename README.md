@@ -1,30 +1,17 @@
-# React + TypeScript + Vite
+# Collaboration Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Backend - [Hanif](https://github.com/Habbatul)
 
-Currently, two official plugins are available:
+  Techstack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badgee&logo=openjdk&logoColor=white)
+  ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-squaree&logo=Spring&logoColor=white)
+  ![Postgres](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badgee&logo=postgresql&logoColor=white)
 
-## Expanding the ESLint configuration
+- Frontend - [mmulyana](https://github.com/mmulyana)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+  Techstack
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+  ![React.js](https://img.shields.io/badge/-React.js-%23282C34?style=for-the-badgee&logo=react)
+  ![Typescript](https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square)
+  ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=plastic&logo=react%20query&logoColor=white)

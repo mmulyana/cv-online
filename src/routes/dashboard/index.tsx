@@ -1,5 +1,5 @@
+import Layout from './layout'
+
 export default function Page() {
-    return (
-        <div>Dashboard</div>
-    )
+  return <Layout>Dashboard</Layout>
 }

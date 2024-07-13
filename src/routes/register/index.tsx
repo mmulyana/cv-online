@@ -8,14 +8,14 @@ import {
 
 import { Link } from 'react-router-dom'
 import { PATHS } from '@/constant/_paths'
-import { atom, useAtom } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
 import { FirstForm, SecondForm } from './component'
 
 export const stepAtom = atom('first')
 export const dataAtom = atom<Record<string, string>>({})
 
 export default function Page() {
-  const [step, setStep] = useAtom(stepAtom)
+  const step = useAtomValue(stepAtom)
 
   const content: Record<string, React.ReactNode> = {
     first: <FirstForm />,

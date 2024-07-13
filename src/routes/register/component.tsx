@@ -14,9 +14,12 @@ import { registerFirstSchema, registerSecondSchema } from './schema'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { dataAtom, stepAtom } from '.'
 import { useNavigate } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { PATHS } from '@/constant/_paths'
 
 export function FirstForm() {
   const form = useForm<z.infer<typeof registerFirstSchema>>({
+    resolver: zodResolver(registerFirstSchema),
     defaultValues: {
       email: '',
       username: '',
@@ -30,11 +33,12 @@ export function FirstForm() {
     setData(data)
     setStep('second')
   }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submit)}
-        className='flex flex-col gap-4'
+        className='flex flex-col gap-6'
       >
         <FormField
           control={form.control}
@@ -42,12 +46,12 @@ export function FirstForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <div>
+              <div className='relative'>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
+                <FormMessage />
               </div>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -57,10 +61,12 @@ export function FirstForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder='example@mail.com' {...field} />
-              </FormControl>
-              <FormMessage />
+              <div className='relative'>
+                <FormControl>
+                  <Input placeholder='example@mail.com' {...field} />
+                </FormControl>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -76,6 +82,7 @@ export function SecondForm() {
   const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof registerSecondSchema>>({
+    resolver: zodResolver(registerSecondSchema),
     defaultValues: {
       password: '',
       confirmPassword: '',
@@ -93,13 +100,14 @@ export function SecondForm() {
       ...data,
     }
     console.log(payload)
+    navigate(PATHS.LOGIN)
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submit)}
-        className='flex flex-col gap-4'
+        className='flex flex-col gap-6'
       >
         <FormField
           control={form.control}
@@ -107,12 +115,12 @@ export function SecondForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-              <div>
+              <div className='relative'>
                 <FormControl>
                   <Input type='password' {...field} />
                 </FormControl>
+                <FormMessage />
               </div>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -122,10 +130,12 @@ export function SecondForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
+              <div className='relative'>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />

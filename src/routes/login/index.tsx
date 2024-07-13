@@ -18,11 +18,15 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { PATHS } from '@/constant/_paths'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 export default function Page() {
+  const navigate = useNavigate()
+
   const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -31,6 +35,7 @@ export default function Page() {
 
   const submit = (data: z.infer<typeof loginSchema>) => {
     console.log(data)
+    navigate(PATHS.DASHBOARD)
   }
 
   return (
@@ -43,7 +48,7 @@ export default function Page() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(submit)}
-              className='flex flex-col gap-4'
+              className='flex flex-col gap-6'
             >
               <FormField
                 control={form.control}
@@ -51,10 +56,12 @@ export default function Page() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder='example@mail.com' {...field} />
-                    </FormControl>
-                    <FormMessage />
+                    <div className='relative'>
+                      <FormControl>
+                        <Input placeholder='example@mail.com' {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -64,12 +71,12 @@ export default function Page() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <div>
+                    <div className='relative'>
                       <FormControl>
                         <Input type='password' {...field} />
                       </FormControl>
+                      <FormMessage />
                     </div>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -81,7 +88,10 @@ export default function Page() {
         </CardContent>
         <CardFooter>
           <span>
-            Dont have an account? register <Link className='underline' to={PATHS.REGISTER}>here</Link>
+            Dont have an account? register{' '}
+            <Link className='underline' to={PATHS.REGISTER}>
+              here
+            </Link>
           </span>
         </CardFooter>
       </Card>

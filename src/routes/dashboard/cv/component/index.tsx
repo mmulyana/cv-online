@@ -20,9 +20,6 @@ export function Resume() {
   )
 }
 
-type EditProps = {
-  id: number
-}
 export function EditResume(){
   return (
     <Layout>

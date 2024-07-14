@@ -23,10 +23,7 @@ export function Resume() {
   )
 }
 
-type EditProps = {
-  id: number
-}
-export function EditResume(props: EditProps) {
+export function EditResume(){
   return (
     <Layout>
       <p>Edit Resume</p>

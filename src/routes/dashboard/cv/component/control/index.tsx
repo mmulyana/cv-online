@@ -8,6 +8,7 @@ import {
   UserIcon,
 } from 'lucide-react'
 import { useMemo } from 'react'
+import { BasicForm } from './form'
 
 export default function Control() {
   const [url, setUrl] = useUrlState({ state: '' })
@@ -17,7 +18,7 @@ export default function Control() {
       {
         name: 'Basic Information',
         state: '',
-        icon: <UserIcon className="w-4 h-4 opacity-50"/>,
+        icon: <UserIcon className='w-4 h-4 opacity-50' />,
         onClick: () => {
           setUrl({ state: '' })
         },
@@ -25,7 +26,7 @@ export default function Control() {
       {
         name: 'Education',
         state: 'education',
-        icon: <GraduationCap className="w-4 h-4 opacity-50"/>,
+        icon: <GraduationCap className='w-4 h-4 opacity-50' />,
         onClick: () => {
           setUrl({ state: 'education' })
         },
@@ -33,7 +34,7 @@ export default function Control() {
       {
         name: 'Experience',
         state: 'experience',
-        icon: <Briefcase className="w-4 h-4 opacity-50"/>,
+        icon: <Briefcase className='w-4 h-4 opacity-50' />,
         onClick: () => {
           setUrl({ state: 'experience' })
         },
@@ -41,7 +42,7 @@ export default function Control() {
       {
         name: 'Porfolio',
         state: 'portfolio',
-        icon: <Presentation className="w-4 h-4 opacity-50"/>,
+        icon: <Presentation className='w-4 h-4 opacity-50' />,
         onClick: () => {
           setUrl({ state: 'portfolio' })
         },
@@ -49,12 +50,20 @@ export default function Control() {
       {
         name: 'Skill',
         state: 'skill',
-        icon: <Sparkles className="w-4 h-4 opacity-50"/>,
+        icon: <Sparkles className='w-4 h-4 opacity-50' />,
         onClick: () => {
           setUrl({ state: 'skill' })
         },
       },
     ],
+    []
+  )
+
+  const formMenus = useMemo<Record<string, React.ReactNode>>(
+    () => ({
+      basic: <BasicForm />,
+      education: <p>Education</p>,
+    }),
     []
   )
 
@@ -73,7 +82,9 @@ export default function Control() {
           </Button>
         ))}
       </div>
-      <div className='flex-1 w-full h-full bg-white'></div>
+      <div className='flex-1 w-full h-full bg-white p-2'>
+        {formMenus[url.state || 'basic']}
+      </div>
     </div>
   )
 }

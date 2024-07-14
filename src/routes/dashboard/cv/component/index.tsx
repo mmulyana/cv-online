@@ -5,6 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
+import Preview from './preview'
 
 export function Resume() {
   return (
@@ -14,7 +15,9 @@ export function Resume() {
           <Control />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={65}></ResizablePanel>
+        <ResizablePanel defaultSize={65}>
+          {/* <Preview /> */}
+        </ResizablePanel>
       </ResizablePanelGroup>
     </Layout>
   )

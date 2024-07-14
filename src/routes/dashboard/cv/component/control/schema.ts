@@ -1,0 +1,12 @@
+import { z } from 'zod'
+
+export const basicSchema = z.object({
+  name: z.string().min(1, { message: 'name required' }),
+  email: z.string().optional(),
+  photo: z.string().optional(),
+  description: z.string().optional(),
+  address: z.string().optional(),
+  portfolio: z.string().optional(),
+  linkedin: z.string().optional(),
+  phone: z.string().optional(),
+})

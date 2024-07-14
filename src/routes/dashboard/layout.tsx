@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PATHS } from '@/constant/_paths'
-import { cn } from '@/lib/utils'
+import { cn } from "@/utils/cn"
 import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'

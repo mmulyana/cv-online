@@ -17,16 +17,20 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PATHS } from '@/constant/_paths'
+import { cn } from '@/lib/utils'
 import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-export default function Layout({ children }: React.PropsWithChildren) {
+export default function Layout({
+  children,
+  className,
+}: React.PropsWithChildren & { className?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
       <Navbar setOpen={setIsOpen} />
-      <div className='px-4 md:px-6 pt-16'>{children}</div>
+      <div className={cn('px-4 md:px-6 pt-16', className)}>{children}</div>
       <Profile open={isOpen} setOpen={setIsOpen} />
     </>
   )
@@ -42,7 +46,7 @@ export function Navbar(props: NavbarProps) {
     navigate(PATHS.LANDING_PAGE)
   }
   return (
-    <header className='fixed top-0 left-0 flex h-16 w-full items-center justify-between border-b bg-background px-4 md:px-6'>
+    <header className='fixed top-0 left-0 flex h-16 w-full items-center justify-between border-b bg-background px-4 md:px-6 z-10'>
       <Link to='/' className='flex items-center gap-2'>
         <span className='text-lg font-semibold text-primary'>CV Online</span>
       </Link>

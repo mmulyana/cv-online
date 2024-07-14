@@ -6,8 +6,8 @@ const LandingPage = lazy(() => import('./landing-page'))
 const Login = lazy(() => import('./login'))
 const Register = lazy(() => import('./register'))
 const Dashboard = lazy(() => import('./dashboard'))
-const DashboardDetail = lazy(() => import('./dashboard'))
-const Resume = lazy(() => import('./resume'))
+const DashboardDetail = lazy(() => import('./dashboard/cv'))
+const Resume = lazy(() => import('./cv'))
 
 const useRoutes = () => [
   {
@@ -27,7 +27,7 @@ const useRoutes = () => [
     element: <Dashboard />,
   },
   {
-    path: PATHS.DETAIL,
+    path: PATHS.DASHBOARD_RESUME,
     element: <DashboardDetail />,
   },
   {

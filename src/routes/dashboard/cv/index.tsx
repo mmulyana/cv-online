@@ -6,7 +6,7 @@ export default function Page() {
     id: '',
   })
 
-  if (url.id !== '') return <EditResume id={Number(url.id)} />
+  if (url.id !== '') return <EditResume />
 
   return <Resume />
 }

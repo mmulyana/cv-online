@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useMemo } from 'react'
 import { BasicForm } from './form'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Control() {
   const [url, setUrl] = useUrlState({ state: '' })
@@ -82,9 +83,9 @@ export default function Control() {
           </Button>
         ))}
       </div>
-      <div className='flex-1 w-full h-full bg-white p-2'>
+      <ScrollArea className='flex-1 w-full h-full bg-white p-2'>
         {formMenus[url.state || 'basic']}
-      </div>
+      </ScrollArea>
     </div>
   )
 }

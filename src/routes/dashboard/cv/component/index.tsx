@@ -16,7 +16,7 @@ export function Resume() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={65}>
-          {/* <Preview /> */}
+          <Preview />
         </ResizablePanel>
       </ResizablePanelGroup>
     </Layout>

@@ -16,29 +16,18 @@ import { resumeAtom } from '../..'
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
-const DEFAULT_VALUES = {
-  name: '',
-  address: '',
-  description: '',
-  email: '',
-  linkedin: '',
-  phone: '',
-  photo: '',
-  portfolio: '',
-}
-
 export function BasicForm() {
   const form = useForm<z.infer<typeof basicSchema>>({
     resolver: zodResolver(basicSchema),
     defaultValues: {
-      name: 'Muhamad Mulyana',
-      address: 'Purwakarta',
-      description: 'Junior Frontend Developer',
-      email: 'mulyan.t20@gmail.com',
-      linkedin: 'https://www.linkedin.com/in/mmulyana/',
-      phone: '087879824426',
+      name: 'Example Name',
+      address: 'City',
+      description: 'Description',
+      email: 'Your email',
+      linkedin: '',
+      phone: '',
       photo: '',
-      portfolio: 'https://mmulyana.vercel.app/',
+      portfolio: '',
     },
   })
 

@@ -10,3 +10,16 @@ export const basicSchema = z.object({
   linkedin: z.string().optional(),
   phone: z.string().optional(),
 })
+
+export const educationSchema = z.object({
+  educations: z
+    .object({
+      title: z.string(),
+      school: z.string(),
+      description: z.string(),
+      start_date: z.string().date(),
+      end_date: z.string().date(),
+    })
+    .array()
+    .optional(),
+})

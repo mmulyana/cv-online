@@ -51,3 +51,13 @@ export const portfolioSchema = z.object({
     .array()
     .optional(),
 })
+
+export const skillSchema = z.object({
+  skills: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+    })
+    .array()
+    .optional(),
+})

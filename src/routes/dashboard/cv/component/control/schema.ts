@@ -23,3 +23,17 @@ export const educationSchema = z.object({
     .array()
     .optional(),
 })
+
+export const experienceSchema = z.object({
+  experience: z
+    .object({
+      title: z.string(),
+      company: z.string(),
+      description: z.string(),
+      start_date: z.string().date(),
+      end_date: z.string().date(),
+      link: z.string(),
+    })
+    .array()
+    .optional(),
+})

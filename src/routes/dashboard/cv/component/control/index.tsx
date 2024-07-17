@@ -8,7 +8,7 @@ import {
   UserIcon,
 } from 'lucide-react'
 import { useMemo } from 'react'
-import { BasicForm } from './form'
+import { BasicForm, EducationForm } from './form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Control() {
@@ -63,7 +63,7 @@ export default function Control() {
   const formMenus = useMemo<Record<string, React.ReactNode>>(
     () => ({
       basic: <BasicForm />,
-      education: <p>Education</p>,
+      education: <EducationForm />,
     }),
     []
   )
@@ -83,7 +83,7 @@ export default function Control() {
           </Button>
         ))}
       </div>
-      <ScrollArea className='flex-1 w-full h-full bg-white p-2'>
+      <ScrollArea className='flex-1 w-full h-full bg-white p-2 py-4'>
         {formMenus[url.state || 'basic']}
       </ScrollArea>
     </div>

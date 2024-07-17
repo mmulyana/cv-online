@@ -11,11 +11,11 @@ export function Resume() {
   return (
     <Layout className='!px-0'>
       <ResizablePanelGroup direction='horizontal' className='w-full border'>
-        <ResizablePanel defaultSize={35}>
+        <ResizablePanel defaultSize={48}>
           <Control />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={65}>
+        <ResizablePanel defaultSize={52}>
           <Preview />
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -23,7 +23,7 @@ export function Resume() {
   )
 }
 
-export function EditResume(){
+export function EditResume() {
   return (
     <Layout>
       <p>Edit Resume</p>

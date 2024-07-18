@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { basicSchema, educationSchema } from './schema'
+import { basicSchema, educationSchema, experienceSchema } from './schema'
 import { z } from 'zod'
 import { useAtom } from 'jotai'
 import { resumeAtom } from '../..'
@@ -304,6 +304,156 @@ export function EducationForm() {
             }
           >
             Tambah
+          </Button>
+        </div>
+        <Button type='submit' className='mt-2'>
+          Save
+        </Button>
+      </form>
+    </Form>
+  )
+}
+
+export function ExperienceForm() {
+  const form = useForm<z.infer<typeof experienceSchema>>({
+    resolver: zodResolver(experienceSchema),
+    defaultValues: {
+      experience: [
+        {
+          title: '',
+          company: '',
+          description: '',
+          start_date: '',
+          end_date: '',
+        },
+      ],
+    },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'experience',
+    control: form.control,
+  })
+
+  const [resume, setResume] = useAtom(resumeAtom)
+
+  useEffect(() => {
+    const subscription = form.watch((data: any) => {
+      setResume({ ...resume, experience: [...data.experience] })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form.watch])
+
+  return (
+    <Form {...form}>
+      <form className='flex flex-col gap-4 px-3'>
+        <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
+        {fields.map((_, index) => (
+          <div key={index} className='flex flex-col gap-2'>
+            <div>
+              <FormLabel
+                htmlFor={`educations.${index}.title`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Title
+              </FormLabel>
+              <Input
+                placeholder='title'
+                {...form.register(`experience.${index}.title`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`experience.${index}.company`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Company
+              </FormLabel>
+              <Input
+                placeholder='company'
+                {...form.register(`experience.${index}.company`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`experience.${index}.link`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Link
+              </FormLabel>
+              <Input
+                placeholder='link'
+                {...form.register(`experience.${index}.link`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`experience.${index}.description`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Description
+              </FormLabel>
+              <Textarea
+                placeholder='description'
+                {...form.register(`experience.${index}.description`)}
+              />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <FormLabel
+                  htmlFor={`experience.${index}.start_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  Start Date
+                </FormLabel>
+                <Input
+                  type='date'
+                  className='w-full'
+                  {...form.register(`experience.${index}.start_date`)}
+                />
+              </div>
+              <div>
+                <FormLabel
+                  htmlFor={`experience.${index}.end_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  End Date
+                </FormLabel>
+                <Input
+                  className='w-full'
+                  type='date'
+                  {...form.register(`experience.${index}.end_date`)}
+                />
+              </div>
+            </div>
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              onClick={() => remove(index)}
+            >
+              <span className='text-xs'>Hapus</span>
+            </Button>
+          </div>
+        ))}
+        <div>
+          <Button
+            type='button'
+            variant='secondary'
+            size='sm'
+            onClick={() =>
+              append({
+                title: '',
+                description: '',
+                company: '',
+                start_date: '',
+                end_date: '',
+                link: '',
+              })
+            }
+          >
+            Add
           </Button>
         </div>
         <Button type='submit' className='mt-2'>

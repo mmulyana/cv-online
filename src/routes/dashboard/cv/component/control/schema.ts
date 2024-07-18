@@ -39,7 +39,7 @@ export const experienceSchema = z.object({
 })
 
 export const portfolioSchema = z.object({
-  experience: z
+  portfolios: z
     .object({
       title: z.string(),
       role: z.string(),

@@ -191,14 +191,15 @@ export function EducationForm() {
     control: form.control,
   })
 
-  // const [resume, setResume] = useAtom(resumeAtom)
-  // useEffect(() => {
-  //   const data = form.watch()
-  //   const subscription = form.watch((data: Record<string, string>) => {
-  //     setResume({ ...resume, ...data })
-  //   })
-  //   return () => subscription.unsubscribe()
-  // }, [form.watch])
+  const [resume, setResume] = useAtom(resumeAtom)
+
+  useEffect(() => {
+    const subscription = form.watch((data: any) => {
+      setResume({ ...resume, educations: [...data.educations] })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form.watch])
 
   const onSubmit = (data: z.infer<typeof educationSchema>) => {
     console.log(data)
@@ -211,7 +212,7 @@ export function EducationForm() {
         className='flex flex-col gap-4 px-3'
       >
         <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
-        {fields.map((field, index) => (
+        {fields.map((_, index) => (
           <div key={index} className='flex flex-col gap-2'>
             <div>
               <FormLabel

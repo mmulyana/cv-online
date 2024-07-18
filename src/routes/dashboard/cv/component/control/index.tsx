@@ -8,7 +8,7 @@ import {
   UserIcon,
 } from 'lucide-react'
 import { useMemo } from 'react'
-import { BasicForm, EducationForm } from './form'
+import { BasicForm, EducationForm, ExperienceForm } from './form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Control() {
@@ -64,6 +64,7 @@ export default function Control() {
     () => ({
       basic: <BasicForm />,
       education: <EducationForm />,
+      experience: <ExperienceForm />,
     }),
     []
   )

@@ -30,26 +30,30 @@ type Portfolios = {
 
 type Skills = {
   id: number
-  name: string
+  name?: string
 }
 
-type Resume = {
-  design: number
-  name: string
-  photo: string
-  description: string
-  address: string
+type Contact = {
   email: string
-  portfolio: string
+  portofolioWeb: string
   linkedin: string
   phone: string
-  experience: Experiences[]
-  educations: Educations[]
-  portfolios: Portfolios[]
-  skills: Skills[]
 }
 
-export const resumeAtom = atom<Partial<Resume>>({})
+export type Resume = {
+  design?: string
+  name?: string
+  photo?: string
+  description?: string
+  address?: string
+  contact: Partial<Contact>
+  experience: Partial<Experiences[]>
+  education: Partial<Educations[]>
+  portfolio: Partial<Portfolios[]>
+  skills: Partial<Skills[]>
+}
+
+export const resumeAtom = atom<Resume | null>(null)
 
 export default function Page() {
   const [url, _] = useUrlState({

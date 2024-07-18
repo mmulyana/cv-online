@@ -63,8 +63,8 @@ export default function Control() {
   const formMenus = useMemo<Record<string, React.ReactNode>>(
     () => ({
       basic: <BasicForm />,
-      education: <EducationForm />,
       experience: <ExperienceForm />,
+      education: <EducationForm />,
       portfolio: <PortfolioForm />,
     }),
     []

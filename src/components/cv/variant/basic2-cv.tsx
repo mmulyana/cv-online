@@ -1,5 +1,7 @@
+import { Resume } from '@/routes/dashboard/cv'
+
 type Props = {
-  data: any
+  data: Resume | null
 }
 export default function Basic2CV({ data }: Props) {
   return (
@@ -9,9 +11,9 @@ export default function Basic2CV({ data }: Props) {
         <p className='text-gray-500'>{data?.description}</p>
       </div>
       <div className='flex justify-between items-center gap-4 mt-4'>
-        <span className='text-xs'>{data?.email}</span>
-        <span className='text-xs'>{data?.phone}</span>
-        <span className='text-xs'>{data?.portfolio}</span>
+        <span className='text-xs'>{data?.contact?.email}</span>
+        <span className='text-xs'>{data?.contact?.phone}</span>
+        <span className='text-xs'>{data?.contact?.portofolioWeb}</span>
       </div>
       <hr className='w-full border border-gray-100 mt-2' />
     </div>

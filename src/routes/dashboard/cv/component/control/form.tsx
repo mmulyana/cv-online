@@ -9,7 +9,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { basicSchema, educationSchema, experienceSchema } from './schema'
+import {
+  basicSchema,
+  educationSchema,
+  experienceSchema,
+  portfolioSchema,
+} from './schema'
 import { z } from 'zod'
 import { useAtom } from 'jotai'
 import { resumeAtom } from '../..'
@@ -447,6 +452,157 @@ export function ExperienceForm() {
                 title: '',
                 description: '',
                 company: '',
+                start_date: '',
+                end_date: '',
+                link: '',
+              })
+            }
+          >
+            Add
+          </Button>
+        </div>
+        <Button type='submit' className='mt-2'>
+          Save
+        </Button>
+      </form>
+    </Form>
+  )
+}
+
+export function PortfolioForm() {
+  const form = useForm<z.infer<typeof portfolioSchema>>({
+    resolver: zodResolver(portfolioSchema),
+    defaultValues: {
+      portfolios: [
+        {
+          title: '',
+          role: '',
+          description: '',
+          start_date: '',
+          end_date: '',
+          link: '',
+        },
+      ],
+    },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'portfolios',
+    control: form.control,
+  })
+
+  const [resume, setResume] = useAtom(resumeAtom)
+
+  useEffect(() => {
+    const subscription = form.watch((data: any) => {
+      setResume({ ...resume, portfolios: [...data.portfolios] })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form.watch])
+
+  return (
+    <Form {...form}>
+      <form className='flex flex-col gap-4 px-3'>
+        <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
+        {fields.map((_, index) => (
+          <div key={index} className='flex flex-col gap-2'>
+            <div>
+              <FormLabel
+                htmlFor={`educations.${index}.title`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Title
+              </FormLabel>
+              <Input
+                placeholder='title'
+                {...form.register(`portfolios.${index}.title`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolios.${index}.role`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Role
+              </FormLabel>
+              <Input
+                placeholder='role'
+                {...form.register(`portfolios.${index}.role`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolios.${index}.link`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Link
+              </FormLabel>
+              <Input
+                placeholder='link'
+                {...form.register(`portfolios.${index}.link`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolios.${index}.description`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Description
+              </FormLabel>
+              <Textarea
+                placeholder='description'
+                {...form.register(`portfolios.${index}.description`)}
+              />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <FormLabel
+                  htmlFor={`portfolios.${index}.start_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  Start Date
+                </FormLabel>
+                <Input
+                  type='date'
+                  className='w-full'
+                  {...form.register(`portfolios.${index}.start_date`)}
+                />
+              </div>
+              <div>
+                <FormLabel
+                  htmlFor={`portfolios.${index}.end_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  End Date
+                </FormLabel>
+                <Input
+                  className='w-full'
+                  type='date'
+                  {...form.register(`portfolios.${index}.end_date`)}
+                />
+              </div>
+            </div>
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              onClick={() => remove(index)}
+            >
+              <span className='text-xs'>Hapus</span>
+            </Button>
+          </div>
+        ))}
+        <div>
+          <Button
+            type='button'
+            variant='secondary'
+            size='sm'
+            onClick={() =>
+              append({
+                title: '',
+                role: '',
+                description: '',
                 start_date: '',
                 end_date: '',
                 link: '',

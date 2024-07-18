@@ -16,8 +16,8 @@ import {
   portfolioSchema,
 } from './schema'
 import { z } from 'zod'
-import { useAtom } from 'jotai'
-import { resumeAtom } from '../..'
+import { useSetAtom } from 'jotai'
+import { Resume, resumeAtom } from '../..'
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -26,40 +26,40 @@ export function BasicForm() {
   const form = useForm<z.infer<typeof basicSchema>>({
     resolver: zodResolver(basicSchema),
     defaultValues: {
-      name: 'Example Name',
-      address: 'City',
-      description: 'Description',
-      email: 'Your email',
-      linkedin: '',
-      phone: '',
+      name: '',
+      address: '',
+      description: '',
       photo: '',
-      portfolio: '',
+      contact: {
+        email: '',
+        linkedin: '',
+        phone: '',
+        portfolioWeb: '',
+      },
     },
   })
 
-  const [resume, setResume] = useAtom(resumeAtom)
+  const setResume = useSetAtom(resumeAtom)
 
   useEffect(() => {
-    const data = form.watch()
-    setResume({ ...data })
+    const subscription = form.watch((data) => {
+      const payload = {
+        name: data.name,
+        address: data.address,
+        description: data.description,
+        photo: '',
+        contact: { ...data.contact },
+      } as Partial<Resume>
 
-    const subscription = form.watch((data: Record<string, string>) => {
-      setResume({ ...resume, ...data })
+      setResume((prev) => ({ ...prev!, ...payload }))
     })
 
     return () => subscription.unsubscribe()
   }, [form.watch])
 
-  const onSubmit = (data: z.infer<typeof basicSchema>) => {
-    console.log(data)
-  }
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='flex flex-col gap-4 px-3'
-      >
+      <form className='flex flex-col gap-4 px-3'>
         <FormField
           control={form.control}
           name='name'
@@ -75,21 +75,7 @@ export function BasicForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <div className='relative'>
-                <FormControl>
-                  <Input placeholder='example@mail.com' {...field} />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name='address'
@@ -124,7 +110,23 @@ export function BasicForm() {
 
         <FormField
           control={form.control}
-          name='linkedin'
+          name='contact.email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <div className='relative'>
+                <FormControl>
+                  <Input placeholder='example@mail.com' {...field} />
+                </FormControl>
+                <FormMessage />
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='contact.linkedin'
           render={({ field }) => (
             <FormItem>
               <FormLabel>LinkedIn</FormLabel>
@@ -137,9 +139,10 @@ export function BasicForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name='phone'
+          name='contact.phone'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
@@ -152,9 +155,10 @@ export function BasicForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name='portfolio'
+          name='contact.portfolioWeb'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Website or portfolio</FormLabel>
@@ -167,9 +171,6 @@ export function BasicForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' className='mt-2'>
-          Save
-        </Button>
       </form>
     </Form>
   )
@@ -179,7 +180,7 @@ export function EducationForm() {
   const form = useForm<z.infer<typeof educationSchema>>({
     resolver: zodResolver(educationSchema),
     defaultValues: {
-      educations: [
+      education: [
         {
           title: '',
           school: '',
@@ -192,111 +193,28 @@ export function EducationForm() {
   })
 
   const { fields, append, remove } = useFieldArray({
-    name: 'educations',
+    name: 'education',
     control: form.control,
   })
 
-  const [resume, setResume] = useAtom(resumeAtom)
+  const setResume = useSetAtom(resumeAtom)
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
-      setResume({ ...resume, educations: [...data.educations] })
+      setResume((prev) => ({ ...prev!, education: [...data.education] }))
     })
 
     return () => subscription.unsubscribe()
   }, [form.watch])
 
-  const onSubmit = (data: z.infer<typeof educationSchema>) => {
-    console.log(data)
-  }
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='flex flex-col gap-4 px-3'
-      >
-        <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
-        {fields.map((_, index) => (
-          <div key={index} className='flex flex-col gap-2'>
-            <div>
-              <FormLabel
-                htmlFor={`educations.${index}.title`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Title
-              </FormLabel>
-              <Input
-                placeholder='title'
-                {...form.register(`educations.${index}.title`)}
-              />
-            </div>
-            <div>
-              <FormLabel
-                htmlFor={`educations.${index}.school`}
-                className='text-xs font-normal text-gray-500'
-              >
-                School
-              </FormLabel>
-              <Input
-                placeholder='school'
-                {...form.register(`educations.${index}.school`)}
-              />
-            </div>
-            <div>
-              <FormLabel
-                htmlFor={`educations.${index}.description`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Description
-              </FormLabel>
-              <Textarea
-                placeholder='description'
-                {...form.register(`educations.${index}.description`)}
-              />
-            </div>
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <FormLabel
-                  htmlFor={`educations.${index}.start_date`}
-                  className='text-xs font-normal text-gray-500'
-                >
-                  Start Date
-                </FormLabel>
-                <Input
-                  type='date'
-                  className='w-full'
-                  {...form.register(`educations.${index}.start_date`)}
-                />
-              </div>
-              <div>
-                <FormLabel
-                  htmlFor={`educations.${index}.end_date`}
-                  className='text-xs font-normal text-gray-500'
-                >
-                  End Date
-                </FormLabel>
-                <Input
-                  className='w-full'
-                  type='date'
-                  {...form.register(`educations.${index}.end_date`)}
-                />
-              </div>
-            </div>
-            <Button
-              type='button'
-              variant='ghost'
-              size='sm'
-              onClick={() => remove(index)}
-            >
-              <span className='text-xs'>Hapus</span>
-            </Button>
-          </div>
-        ))}
-        <div>
+      <form className='flex flex-col gap-4 px-3'>
+        <div className='flex justify-between items-center'>
+          <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
           <Button
             type='button'
-            variant='secondary'
+            variant='ghost'
             size='sm'
             onClick={() =>
               append({
@@ -308,12 +226,87 @@ export function EducationForm() {
               })
             }
           >
-            Tambah
+            <span className='text-xs'>Add</span>
           </Button>
         </div>
-        <Button type='submit' className='mt-2'>
-          Save
-        </Button>
+        {fields.map((_, index) => (
+          <div key={index} className='flex flex-col gap-2'>
+            <div>
+              <FormLabel
+                htmlFor={`education.${index}.title`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Title
+              </FormLabel>
+              <Input
+                placeholder='title'
+                {...form.register(`education.${index}.title`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`education.${index}.school`}
+                className='text-xs font-normal text-gray-500'
+              >
+                School
+              </FormLabel>
+              <Input
+                placeholder='school'
+                {...form.register(`education.${index}.school`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`education.${index}.description`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Description
+              </FormLabel>
+              <Textarea
+                placeholder='description'
+                {...form.register(`education.${index}.description`)}
+              />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <FormLabel
+                  htmlFor={`education.${index}.start_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  Start Date
+                </FormLabel>
+                <Input
+                  type='date'
+                  className='w-full'
+                  {...form.register(`education.${index}.start_date`)}
+                />
+              </div>
+              <div>
+                <FormLabel
+                  htmlFor={`education.${index}.end_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  End Date
+                </FormLabel>
+                <Input
+                  className='w-full'
+                  type='date'
+                  {...form.register(`education.${index}.end_date`)}
+                />
+              </div>
+            </div>
+            <div>
+              <Button
+                type='button'
+                variant='ghost'
+                size='sm'
+                onClick={() => remove(index)}
+              >
+                <span className='text-xs'>Remove</span>
+              </Button>
+            </div>
+          </div>
+        ))}
       </form>
     </Form>
   )
@@ -340,11 +333,12 @@ export function ExperienceForm() {
     control: form.control,
   })
 
-  const [resume, setResume] = useAtom(resumeAtom)
+  const setResume = useSetAtom(resumeAtom)
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
-      setResume({ ...resume, experience: [...data.experience] })
+      const experience = [...data.experience]
+      setResume((prev) => ({ ...prev!, experience }))
     })
 
     return () => subscription.unsubscribe()
@@ -353,7 +347,26 @@ export function ExperienceForm() {
   return (
     <Form {...form}>
       <form className='flex flex-col gap-4 px-3'>
-        <FormLabel className='text-xs text-gray-400'>Experiences</FormLabel>
+        <div className='flex justify-between items-center'>
+          <FormLabel className='text-xs text-gray-400'>Experiences</FormLabel>
+          <Button
+            type='button'
+            variant='secondary'
+            size='sm'
+            onClick={() =>
+              append({
+                title: '',
+                description: '',
+                company: '',
+                start_date: '',
+                end_date: '',
+                link: '',
+              })
+            }
+          >
+            <span className='text-xs'>Add</span>
+          </Button>
+        </div>
         {fields.map((_, index) => (
           <div key={index} className='flex flex-col gap-2'>
             <div>
@@ -436,34 +449,13 @@ export function ExperienceForm() {
               type='button'
               variant='ghost'
               size='sm'
+              className='inline-block w-fit'
               onClick={() => remove(index)}
             >
-              <span className='text-xs'>Hapus</span>
+              <span className='text-xs'>Remove</span>
             </Button>
           </div>
         ))}
-        <div>
-          <Button
-            type='button'
-            variant='secondary'
-            size='sm'
-            onClick={() =>
-              append({
-                title: '',
-                description: '',
-                company: '',
-                start_date: '',
-                end_date: '',
-                link: '',
-              })
-            }
-          >
-            Add
-          </Button>
-        </div>
-        <Button type='submit' className='mt-2'>
-          Save
-        </Button>
       </form>
     </Form>
   )
@@ -473,7 +465,7 @@ export function PortfolioForm() {
   const form = useForm<z.infer<typeof portfolioSchema>>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
-      portfolios: [
+      portfolio: [
         {
           title: '',
           role: '',
@@ -487,15 +479,16 @@ export function PortfolioForm() {
   })
 
   const { fields, append, remove } = useFieldArray({
-    name: 'portfolios',
+    name: 'portfolio',
     control: form.control,
   })
 
-  const [resume, setResume] = useAtom(resumeAtom)
+  const setResume = useSetAtom(resumeAtom)
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
-      setResume({ ...resume, portfolios: [...data.portfolios] })
+      const portfolio = [...data.portfolio]
+      setResume((prev) => ({ ...prev!, portfolio }))
     })
 
     return () => subscription.unsubscribe()
@@ -504,96 +497,8 @@ export function PortfolioForm() {
   return (
     <Form {...form}>
       <form className='flex flex-col gap-4 px-3'>
-        <FormLabel className='text-xs text-gray-400'>Portfolios</FormLabel>
-        {fields.map((_, index) => (
-          <div key={index} className='flex flex-col gap-2'>
-            <div>
-              <FormLabel
-                htmlFor={`educations.${index}.title`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Title
-              </FormLabel>
-              <Input
-                placeholder='title'
-                {...form.register(`portfolios.${index}.title`)}
-              />
-            </div>
-            <div>
-              <FormLabel
-                htmlFor={`portfolios.${index}.role`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Role
-              </FormLabel>
-              <Input
-                placeholder='role'
-                {...form.register(`portfolios.${index}.role`)}
-              />
-            </div>
-            <div>
-              <FormLabel
-                htmlFor={`portfolios.${index}.link`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Link
-              </FormLabel>
-              <Input
-                placeholder='link'
-                {...form.register(`portfolios.${index}.link`)}
-              />
-            </div>
-            <div>
-              <FormLabel
-                htmlFor={`portfolios.${index}.description`}
-                className='text-xs font-normal text-gray-500'
-              >
-                Description
-              </FormLabel>
-              <Textarea
-                placeholder='description'
-                {...form.register(`portfolios.${index}.description`)}
-              />
-            </div>
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <FormLabel
-                  htmlFor={`portfolios.${index}.start_date`}
-                  className='text-xs font-normal text-gray-500'
-                >
-                  Start Date
-                </FormLabel>
-                <Input
-                  type='date'
-                  className='w-full'
-                  {...form.register(`portfolios.${index}.start_date`)}
-                />
-              </div>
-              <div>
-                <FormLabel
-                  htmlFor={`portfolios.${index}.end_date`}
-                  className='text-xs font-normal text-gray-500'
-                >
-                  End Date
-                </FormLabel>
-                <Input
-                  className='w-full'
-                  type='date'
-                  {...form.register(`portfolios.${index}.end_date`)}
-                />
-              </div>
-            </div>
-            <Button
-              type='button'
-              variant='ghost'
-              size='sm'
-              onClick={() => remove(index)}
-            >
-              <span className='text-xs'>Hapus</span>
-            </Button>
-          </div>
-        ))}
-        <div>
+        <div className='flex justify-between items-center'>
+          <FormLabel className='text-xs text-gray-400'>Portfolios</FormLabel>
           <Button
             type='button'
             variant='secondary'
@@ -609,12 +514,98 @@ export function PortfolioForm() {
               })
             }
           >
-            Add
+            <span className='text-xs'>Add</span>
           </Button>
         </div>
-        <Button type='submit' className='mt-2'>
-          Save
-        </Button>
+        {fields.map((_, index) => (
+          <div key={index} className='flex flex-col gap-2'>
+            <div>
+              <FormLabel
+                htmlFor={`portfolio.${index}.title`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Title
+              </FormLabel>
+              <Input
+                placeholder='title'
+                {...form.register(`portfolio.${index}.title`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolio.${index}.role`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Role
+              </FormLabel>
+              <Input
+                placeholder='role'
+                {...form.register(`portfolio.${index}.role`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolio.${index}.link`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Link
+              </FormLabel>
+              <Input
+                placeholder='link'
+                {...form.register(`portfolio.${index}.link`)}
+              />
+            </div>
+            <div>
+              <FormLabel
+                htmlFor={`portfolio.${index}.description`}
+                className='text-xs font-normal text-gray-500'
+              >
+                Description
+              </FormLabel>
+              <Textarea
+                placeholder='description'
+                {...form.register(`portfolio.${index}.description`)}
+              />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <FormLabel
+                  htmlFor={`portfolio.${index}.start_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  Start Date
+                </FormLabel>
+                <Input
+                  type='date'
+                  className='w-full'
+                  {...form.register(`portfolio.${index}.start_date`)}
+                />
+              </div>
+              <div>
+                <FormLabel
+                  htmlFor={`portfolio.${index}.end_date`}
+                  className='text-xs font-normal text-gray-500'
+                >
+                  End Date
+                </FormLabel>
+                <Input
+                  className='w-full'
+                  type='date'
+                  {...form.register(`portfolio.${index}.end_date`)}
+                />
+              </div>
+            </div>
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              className='inline-block w-fit'
+              onClick={() => remove(index)}
+            >
+              <span className='text-xs'>Remove</span>
+            </Button>
+          </div>
+        ))}
       </form>
     </Form>
   )

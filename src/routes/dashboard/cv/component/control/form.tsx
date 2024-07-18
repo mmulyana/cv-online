@@ -353,7 +353,7 @@ export function ExperienceForm() {
   return (
     <Form {...form}>
       <form className='flex flex-col gap-4 px-3'>
-        <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
+        <FormLabel className='text-xs text-gray-400'>Experiences</FormLabel>
         {fields.map((_, index) => (
           <div key={index} className='flex flex-col gap-2'>
             <div>
@@ -504,7 +504,7 @@ export function PortfolioForm() {
   return (
     <Form {...form}>
       <form className='flex flex-col gap-4 px-3'>
-        <FormLabel className='text-xs text-gray-400'>Educations</FormLabel>
+        <FormLabel className='text-xs text-gray-400'>Portfolios</FormLabel>
         {fields.map((_, index) => (
           <div key={index} className='flex flex-col gap-2'>
             <div>

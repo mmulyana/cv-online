@@ -1,3 +1,4 @@
+import { userAtom } from '@/atoms/user'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Dialog,
@@ -17,16 +18,36 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PATHS } from '@/constant/_paths'
-import { cn } from "@/utils/cn"
+import { cn } from '@/utils/cn'
+import { CookieKeys, CookieStorage } from '@/utils/cookie'
+import { useAtom, useAtomValue } from 'jotai'
 import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { jwtDecode, JwtPayload } from 'jwt-decode'
 
 export default function Layout({
   children,
   className,
 }: React.PropsWithChildren & { className?: string }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useAtom(userAtom)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user !== null) return
+
+    const token = CookieStorage.get(CookieKeys.AuthToken)
+
+    if (!token) {
+      navigate(PATHS.LOGIN)
+      return
+    }
+
+    const decoded: JwtPayload & { username: string } = jwtDecode(token)
+    setUser({ username: decoded.username })
+  }, [user])
+
   return (
     <>
       <Navbar setOpen={setIsOpen} />
@@ -42,9 +63,13 @@ type NavbarProps = {
 export function Navbar(props: NavbarProps) {
   const navigate = useNavigate()
 
+  const user = useAtomValue(userAtom)
+
   const onLogout = () => {
+    CookieStorage.remove(CookieKeys.AuthToken)
     navigate(PATHS.LANDING_PAGE)
   }
+
   return (
     <header className='fixed top-0 left-0 flex h-16 w-full items-center justify-between border-b bg-background px-4 md:px-6 z-10'>
       <Link to='/' className='flex items-center gap-2'>
@@ -61,10 +86,7 @@ export function Navbar(props: NavbarProps) {
               <UserIcon className='w-6 h-6 text-slate-800' />
             </div>
             <div className='text-left'>
-              <p className='text-slate-800'>username</p>
-              <p className='text-sm text-slate-400 font-normal'>
-                example@mail.com
-              </p>
+              <p className='text-slate-800'>{user?.username || ''}</p>
             </div>
             <ChevronDown />
           </Button>
@@ -104,6 +126,8 @@ type AccountProps = {
   open: boolean
 }
 export function Profile(props: AccountProps) {
+  const user = useAtomValue(userAtom)
+
   return (
     <Dialog onOpenChange={props.setOpen} open={props.open}>
       <DialogContent className='sm:max-w-[425px]'>
@@ -118,13 +142,7 @@ export function Profile(props: AccountProps) {
             <Label htmlFor='name' className='text-right'>
               Name
             </Label>
-            <Input id='name' defaultValue='username' disabled />
-          </div>
-          <div className='flex flex-col gap-2 items-start'>
-            <Label htmlFor='email' className='text-right'>
-              Email
-            </Label>
-            <Input id='email' defaultValue='example@mail.com' disabled />
+            <Input id='name' defaultValue={user?.username || ''} disabled />
           </div>
         </div>
         <DialogFooter>

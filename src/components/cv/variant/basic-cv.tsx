@@ -89,7 +89,7 @@ export default function BasicCV({ data }: Props) {
                 </a>
               )}
               {!!item?.role && (
-                <p className='text-xs text-center text-gray-600'>{item.role}</p>
+                <p className='text-xs text-gray-600'>{item.role}</p>
               )}
             </div>
             <div className='flex justify-end gap-2 text-xs text-gray-400'>

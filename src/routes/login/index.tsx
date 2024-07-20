@@ -18,31 +18,31 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { PATHS } from '@/constant/_paths'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuth } from '@/hooks/api/use-auth'
 
 export default function Page() {
-  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
   })
 
   const submit = (data: z.infer<typeof loginSchema>) => {
-    console.log(data)
-    navigate(PATHS.DASHBOARD)
+    login(data)
   }
 
   return (
     <div>
       <Card className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full'>
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle>Username</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -52,13 +52,13 @@ export default function Page() {
             >
               <FormField
                 control={form.control}
-                name='email'
+                name='username'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <div className='relative'>
                       <FormControl>
-                        <Input placeholder='example@mail.com' {...field} />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </div>

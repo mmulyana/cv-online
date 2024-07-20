@@ -2,7 +2,6 @@ import * as z from 'zod'
 
 export const registerFirstSchema = z.object({
   username: z.string().min(1, { message: 'username required' }),
-  email: z.string().email(),
 })
 
 export const registerSecondSchema = z

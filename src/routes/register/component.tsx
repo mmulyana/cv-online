@@ -13,15 +13,13 @@ import { z } from 'zod'
 import { registerFirstSchema, registerSecondSchema } from './schema'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { dataAtom, stepAtom } from '.'
-import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PATHS } from '@/constant/_paths'
+import { PayloadAuth, useAuth } from '@/hooks/api/use-auth'
 
 export function FirstForm() {
   const form = useForm<z.infer<typeof registerFirstSchema>>({
     resolver: zodResolver(registerFirstSchema),
     defaultValues: {
-      email: '',
       username: '',
     },
   })
@@ -55,23 +53,8 @@ export function FirstForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <div className='relative'>
-                <FormControl>
-                  <Input placeholder='example@mail.com' {...field} />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
         <Button className='mt-4' type='submit'>
-          Next
+          Continue
         </Button>
       </form>
     </Form>
@@ -79,8 +62,7 @@ export function FirstForm() {
 }
 
 export function SecondForm() {
-  const navigate = useNavigate()
-
+  const { register } = useAuth()
   const form = useForm<z.infer<typeof registerSecondSchema>>({
     resolver: zodResolver(registerSecondSchema),
     defaultValues: {
@@ -95,12 +77,11 @@ export function SecondForm() {
   const onPrev = () => setStep('first')
 
   const submit = (data: z.infer<typeof registerSecondSchema>) => {
-    const payload = {
-      ...prevData,
-      ...data,
+    const payload: PayloadAuth = {
+      username: prevData.username,
+      password: data.password,
     }
-    console.log(payload)
-    navigate(PATHS.LOGIN)
+    register(payload)
   }
 
   return (

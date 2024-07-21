@@ -9,22 +9,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
-import {
-  basicSchema,
-  educationSchema,
-  experienceSchema,
-  portfolioSchema,
-} from './schema'
+import { educationSchema, experienceSchema, portfolioSchema } from './schema'
 import { z } from 'zod'
-import { useSetAtom } from 'jotai'
-import { Resume, resumeAtom } from '../..'
-import { useEffect } from 'react'
+import { useAtom, useSetAtom } from 'jotai'
+import { Resume, resumeAtom, isResumeChangedAtom } from '../..'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 export function BasicForm() {
-  const form = useForm<z.infer<typeof basicSchema>>({
-    resolver: zodResolver(basicSchema),
+  const form = useForm({
     defaultValues: {
       name: '',
       address: '',
@@ -38,8 +32,20 @@ export function BasicForm() {
       },
     },
   })
+  const [loaded, setLoaded] = useState(false)
+  const [resume, setResume] = useAtom(resumeAtom)
+  const setResumeHasChanged = useSetAtom(isResumeChangedAtom)
 
-  const setResume = useSetAtom(resumeAtom)
+  useEffect(() => {
+    if (!loaded && resume) {
+      form.setValue('name', resume?.name || '')
+      form.setValue('description', resume?.description || '')
+      form.setValue('address', resume?.address || '')
+      form.setValue('contact.email', resume?.contact.email || '')
+      form.setValue('contact.phone', resume?.contact.phone || '')
+      setLoaded(true)
+    }
+  }, [resume, loaded])
 
   useEffect(() => {
     const subscription = form.watch((data) => {
@@ -52,6 +58,7 @@ export function BasicForm() {
       } as Partial<Resume>
 
       setResume((prev) => ({ ...prev!, ...payload }))
+      setResumeHasChanged(true)
     })
 
     return () => subscription.unsubscribe()
@@ -100,7 +107,7 @@ export function BasicForm() {
               <FormLabel>Description</FormLabel>
               <div className='relative'>
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
               </div>

@@ -1,5 +1,6 @@
 import useUrlState from '@ahooksjs/use-url-state'
 import { EditResume, Resume } from './component'
+import { atomWithStorage } from 'jotai/utils'
 import { atom } from 'jotai'
 
 type Experiences = {
@@ -53,7 +54,8 @@ export type Resume = {
   skills: Partial<Skills[]>
 }
 
-export const resumeAtom = atom<Resume | null>(null)
+export const resumeAtom = atomWithStorage<Resume | null>('resume', null)
+export const isResumeChangedAtom = atom(false)
 
 export default function Page() {
   const [url, _] = useUrlState({

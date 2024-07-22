@@ -43,6 +43,9 @@ export function BasicForm() {
       form.setValue('address', resume?.address || '')
       form.setValue('contact.email', resume?.contact.email || '')
       form.setValue('contact.phone', resume?.contact.phone || '')
+      form.setValue('contact.email', resume?.contact.email || '')
+      form.setValue('contact.portfolioWeb', resume?.contact.portofolioWeb || '')
+      
       setLoaded(true)
     }
   }, [resume, loaded])

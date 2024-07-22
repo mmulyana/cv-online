@@ -1,3 +1,3 @@
-const KEYS = {
+export const KEYS = {
   RESUME: 'resume',
 }

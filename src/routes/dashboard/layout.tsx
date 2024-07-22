@@ -25,6 +25,9 @@ import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode, JwtPayload } from 'jwt-decode'
+import { useCreateResume, useUpdateResume } from '@/hooks/api/use-resume'
+import useUrlState from '@ahooksjs/use-url-state'
+import { resumeAtom } from './cv'
 
 export default function Layout({
   children,
@@ -62,12 +65,32 @@ type NavbarProps = {
 }
 export function Navbar(props: NavbarProps) {
   const navigate = useNavigate()
+  const [url, setUrl] = useUrlState({ id: '' })
+
+  const { mutate: createResume } = useCreateResume()
+  const { mutate: updateResume } = useUpdateResume(
+    isNaN(url.id) ? 0 : Number(url.id)
+  )
 
   const user = useAtomValue(userAtom)
+  const resume = useAtomValue(resumeAtom)
 
   const onLogout = () => {
     CookieStorage.remove(CookieKeys.AuthToken)
     navigate(PATHS.LANDING_PAGE)
+  }
+
+  const onClickResume = () => {
+    if (!isNaN(url.id)) {
+      const payload = {
+        ...resume,
+        id: Number(url.id),
+      }
+      updateResume(payload)
+      return
+    }
+
+    createResume({ ...resume })
   }
 
   return (

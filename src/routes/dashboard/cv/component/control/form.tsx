@@ -15,7 +15,7 @@ import {
 import InputDate from '@/components/common/Input-date'
 import { Input } from '@/components/ui/input'
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Resume } from '@/types/resume'
 import { z } from 'zod'
 
@@ -695,5 +695,38 @@ export function PortfolioForm() {
         ))}
       </form>
     </Form>
+  )
+}
+
+export function StyleForm() {
+  const [resume, setResume] = useAtom(resumeAtom)
+
+  const cvStyles = useMemo(
+    () => [
+      {
+        name: 'Basic',
+        active: 1,
+        onClick: () => setResume((prev) => ({ ...prev!, design: '1' })),
+      },
+      {
+        name: 'Basic 2',
+        active: 2,
+        onClick: () => setResume((prev) => ({ ...prev!, design: '2' })),
+      },
+    ],
+    []
+  )
+  return (
+    <div className='flex flex-col gap-2'>
+      {cvStyles.map((cv, index) => (
+        <Button
+          key={index}
+          variant={cv.active === Number(resume?.design) ? 'default' : 'outline'}
+          onClick={cv.onClick}
+        >
+          {cv.name}
+        </Button>
+      ))}
+    </div>
   )
 }

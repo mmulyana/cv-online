@@ -1,3 +1,6 @@
 import { atom } from 'jotai'
 
-export const userAtom = atom<Record<string, string> | null>(null)
+export type User = {
+  username: string
+}
+export const userAtom = atom<User | null>(null)

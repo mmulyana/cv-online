@@ -34,22 +34,7 @@ export default function Layout({
   className,
 }: React.PropsWithChildren & { className?: string }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [user, setUser] = useAtom(userAtom)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (user !== null) return
-
-    const token = CookieStorage.get(CookieKeys.AuthToken)
-
-    if (!token) {
-      navigate(PATHS.LOGIN)
-      return
-    }
-
-    const decoded: JwtPayload & { username: string } = jwtDecode(token)
-    setUser({ username: decoded.username })
-  }, [user])
 
   return (
     <>

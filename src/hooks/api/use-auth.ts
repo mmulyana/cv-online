@@ -8,8 +8,8 @@ import { toast } from 'sonner'
 import http from '@/utils/http'
 
 export type PayloadAuth = {
-  username: string
-  password: string
+  username?: string
+  password?: string
 }
 
 type AuthResponse = {

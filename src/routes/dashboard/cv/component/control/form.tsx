@@ -1,6 +1,6 @@
 import { educationSchema, experienceSchema, portfolioSchema } from './schema'
-import { useFieldArray, useForm } from 'react-hook-form'
 import { resumeAtom, isResumeChangedAtom } from '../..'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form'
+import InputDate from '@/components/common/Input-date'
 import { Input } from '@/components/ui/input'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -211,6 +212,21 @@ export function EducationForm() {
   const [resume, setResume] = useAtom(resumeAtom)
   const [loaded, setLoaded] = useState(false)
 
+  const handleDateSelect = (
+    index: number,
+    selectedDate: Date | undefined,
+    type: string
+  ) => {
+    if (selectedDate) {
+      const date = new Date(selectedDate)
+      if (type == 'start_date') {
+        form.setValue(`education.${index}.start_date`, date.toISOString())
+      } else {
+        form.setValue(`education.${index}.end_date`, date.toISOString())
+      }
+    }
+  }
+
   useEffect(() => {
     if (!loaded && resume && resume.education && resume.education.length > 0) {
       form.reset({ education: resume.education })
@@ -294,10 +310,11 @@ export function EducationForm() {
                 >
                   Start Date
                 </FormLabel>
-                <Input
-                  type='date'
-                  className='w-full'
-                  {...form.register(`education.${index}.start_date`)}
+                <InputDate
+                  name={`education.${index}.start_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
                 />
               </div>
               <div>
@@ -307,10 +324,12 @@ export function EducationForm() {
                 >
                   End Date
                 </FormLabel>
-                <Input
-                  className='w-full'
-                  type='date'
-                  {...form.register(`education.${index}.end_date`)}
+                <InputDate
+                  name={`education.${index}.end_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
+                  type='end_date'
                 />
               </div>
             </div>
@@ -346,6 +365,21 @@ export function ExperienceForm() {
 
   const [resume, setResume] = useAtom(resumeAtom)
   const [loaded, setLoaded] = useState(false)
+
+  const handleDateSelect = (
+    index: number,
+    selectedDate: Date | undefined,
+    type: string
+  ) => {
+    if (selectedDate) {
+      const date = new Date(selectedDate)
+      if (type == 'start_date') {
+        form.setValue(`experience.${index}.start_date`, date.toISOString())
+      } else {
+        form.setValue(`experience.${index}.end_date`, date.toISOString())
+      }
+    }
+  }
 
   useEffect(() => {
     if (
@@ -449,10 +483,11 @@ export function ExperienceForm() {
                 >
                   Start Date
                 </FormLabel>
-                <Input
-                  type='date'
-                  className='w-full'
-                  {...form.register(`experience.${index}.start_date`)}
+                <InputDate
+                  name={`experience.${index}.start_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
                 />
               </div>
               <div>
@@ -462,10 +497,12 @@ export function ExperienceForm() {
                 >
                   End Date
                 </FormLabel>
-                <Input
-                  className='w-full'
-                  type='date'
-                  {...form.register(`experience.${index}.end_date`)}
+                <InputDate
+                  name={`experience.${index}.end_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
+                  type='end_date'
                 />
               </div>
             </div>
@@ -509,6 +546,21 @@ export function PortfolioForm() {
 
   const [resume, setResume] = useAtom(resumeAtom)
   const [loaded, setLoaded] = useState(false)
+
+  const handleDateSelect = (
+    index: number,
+    selectedDate: Date | undefined,
+    type: string
+  ) => {
+    if (selectedDate) {
+      const date = new Date(selectedDate)
+      if (type == 'start_date') {
+        form.setValue(`portfolio.${index}.start_date`, date.toISOString())
+      } else {
+        form.setValue(`portfolio.${index}.end_date`, date.toISOString())
+      }
+    }
+  }
 
   useEffect(() => {
     if (!loaded && resume && resume.portfolio && resume.portfolio.length > 0) {
@@ -607,10 +659,11 @@ export function PortfolioForm() {
                 >
                   Start Date
                 </FormLabel>
-                <Input
-                  type='date'
-                  className='w-full'
-                  {...form.register(`portfolio.${index}.start_date`)}
+                <InputDate
+                  name={`portfolio.${index}.start_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
                 />
               </div>
               <div>
@@ -620,10 +673,12 @@ export function PortfolioForm() {
                 >
                   End Date
                 </FormLabel>
-                <Input
-                  className='w-full'
-                  type='date'
-                  {...form.register(`portfolio.${index}.end_date`)}
+                <InputDate
+                  name={`portfolio.${index}.end_date`}
+                  control={form.control}
+                  handleSelect={handleDateSelect}
+                  index={index}
+                  type='end_date'
                 />
               </div>
             </div>

@@ -5,10 +5,17 @@ import {
   GraduationCap,
   Presentation,
   Sparkles,
+  SwatchBook,
   UserIcon,
 } from 'lucide-react'
 import { useMemo } from 'react'
-import { BasicForm, EducationForm, ExperienceForm, PortfolioForm } from './form'
+import {
+  BasicForm,
+  EducationForm,
+  ExperienceForm,
+  PortfolioForm,
+  StyleForm,
+} from './form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Control() {
@@ -56,6 +63,14 @@ export default function Control() {
           setUrl({ state: 'skill' })
         },
       },
+      {
+        name: 'Style',
+        state: 'style',
+        icon: <SwatchBook className='w-4 h-4 opacity-50' />,
+        onClick: () => {
+          setUrl({ state: 'style' })
+        },
+      },
     ],
     []
   )
@@ -66,6 +81,7 @@ export default function Control() {
       experience: <ExperienceForm />,
       education: <EducationForm />,
       portfolio: <PortfolioForm />,
+      style: <StyleForm />,
     }),
     []
   )

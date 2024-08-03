@@ -1,21 +1,22 @@
+import { educationSchema, experienceSchema, portfolioSchema } from './schema'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { resumeAtom, isResumeChangedAtom } from '../..'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useFieldArray, useForm } from 'react-hook-form'
-import { educationSchema, experienceSchema, portfolioSchema } from './schema'
-import { z } from 'zod'
 import { useAtom, useSetAtom } from 'jotai'
-import { Resume, resumeAtom, isResumeChangedAtom } from '../..'
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { Resume } from '@/types/resume'
+import { z } from 'zod'
 
 export function BasicForm() {
   const form = useForm({
@@ -45,7 +46,7 @@ export function BasicForm() {
       form.setValue('contact.phone', resume?.contact.phone || '')
       form.setValue('contact.email', resume?.contact.email || '')
       form.setValue('contact.portfolioWeb', resume?.contact.portofolioWeb || '')
-      
+
       setLoaded(true)
     }
   }, [resume, loaded])
@@ -207,7 +208,15 @@ export function EducationForm() {
     control: form.control,
   })
 
-  const setResume = useSetAtom(resumeAtom)
+  const [resume, setResume] = useAtom(resumeAtom)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!loaded && resume && resume.education && resume.education.length > 0) {
+      form.reset({ education: resume.education })
+      setLoaded(true)
+    }
+  }, [resume, loaded])
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
@@ -326,15 +335,7 @@ export function ExperienceForm() {
   const form = useForm<z.infer<typeof experienceSchema>>({
     resolver: zodResolver(experienceSchema),
     defaultValues: {
-      experience: [
-        {
-          title: '',
-          company: '',
-          description: '',
-          start_date: '',
-          end_date: '',
-        },
-      ],
+      experience: [],
     },
   })
 
@@ -343,7 +344,20 @@ export function ExperienceForm() {
     control: form.control,
   })
 
-  const setResume = useSetAtom(resumeAtom)
+  const [resume, setResume] = useAtom(resumeAtom)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (
+      !loaded &&
+      resume &&
+      resume.experience &&
+      resume.experience.length > 0
+    ) {
+      form.reset({ experience: resume.experience })
+      setLoaded(true)
+    }
+  }, [resume, loaded])
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
@@ -493,7 +507,15 @@ export function PortfolioForm() {
     control: form.control,
   })
 
-  const setResume = useSetAtom(resumeAtom)
+  const [resume, setResume] = useAtom(resumeAtom)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!loaded && resume && resume.portfolio && resume.portfolio.length > 0) {
+      form.reset({ portfolio: resume.portfolio })
+      setLoaded(true)
+    }
+  }, [resume, loaded])
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {

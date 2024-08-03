@@ -1,4 +1,4 @@
-import { Resume } from '@/routes/dashboard/cv'
+import { Resume } from '@/types/resume'
 import { format } from 'date-fns'
 
 type Props = {

@@ -1,4 +1,4 @@
-import { Resume } from '@/routes/dashboard/cv'
+import { Resume } from "@/types/resume"
 
 type Props = {
   data: Resume | null

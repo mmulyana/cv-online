@@ -1,4 +1,4 @@
-import { Resume } from '@/routes/dashboard/cv'
+import { Resume } from '@/types/resume'
 import BasicCV from './variant/basic-cv'
 import Basic2CV from './variant/basic2-cv'
 

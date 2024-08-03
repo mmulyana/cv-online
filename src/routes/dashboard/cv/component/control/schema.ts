@@ -18,11 +18,11 @@ export const basicSchema = z.object({
 export const educationSchema = z.object({
   education: z
     .object({
-      title: z.string(),
-      school: z.string(),
-      description: z.string(),
-      start_date: z.string().date(),
-      end_date: z.string().date(),
+      title: z.string().optional(),
+      school: z.string().optional(),
+      description: z.string().optional(),
+      start_date: z.string().date().optional(),
+      end_date: z.string().date().optional(),
     })
     .array()
     .optional(),
@@ -31,12 +31,12 @@ export const educationSchema = z.object({
 export const experienceSchema = z.object({
   experience: z
     .object({
-      title: z.string(),
-      company: z.string(),
-      description: z.string(),
-      start_date: z.string().date(),
-      end_date: z.string().date(),
-      link: z.string(),
+      title: z.string().optional(),
+      company: z.string().optional(),
+      description: z.string().optional(),
+      start_date: z.string().date().optional(),
+      end_date: z.string().date().optional(),
+      link: z.string().optional(),
     })
     .array()
     .optional(),

@@ -1,5 +1,8 @@
-import { userAtom } from '@/atoms/user'
+import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { CookieKeys, CookieStorage } from '@/utils/cookie'
+import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -18,16 +21,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PATHS } from '@/constant/_paths'
+import { userAtom } from '@/atoms/user'
+import { useAtomValue } from 'jotai'
 import { cn } from '@/utils/cn'
-import { CookieKeys, CookieStorage } from '@/utils/cookie'
-import { useAtom, useAtomValue } from 'jotai'
-import { ChevronDown, LogOutIcon, UserIcon } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { jwtDecode, JwtPayload } from 'jwt-decode'
-import { useCreateResume, useUpdateResume } from '@/hooks/api/use-resume'
-import useUrlState from '@ahooksjs/use-url-state'
-import { resumeAtom } from './cv'
 
 export default function Layout({
   children,
@@ -50,32 +46,12 @@ type NavbarProps = {
 }
 export function Navbar(props: NavbarProps) {
   const navigate = useNavigate()
-  const [url, setUrl] = useUrlState({ id: '' })
-
-  const { mutate: createResume } = useCreateResume()
-  const { mutate: updateResume } = useUpdateResume(
-    isNaN(url.id) ? 0 : Number(url.id)
-  )
 
   const user = useAtomValue(userAtom)
-  const resume = useAtomValue(resumeAtom)
 
   const onLogout = () => {
     CookieStorage.remove(CookieKeys.AuthToken)
     navigate(PATHS.LANDING_PAGE)
-  }
-
-  const onClickResume = () => {
-    if (!isNaN(url.id)) {
-      const payload = {
-        ...resume,
-        id: Number(url.id),
-      }
-      updateResume(payload)
-      return
-    }
-
-    createResume({ ...resume })
   }
 
   return (
@@ -83,48 +59,48 @@ export function Navbar(props: NavbarProps) {
       <Link to='/' className='flex items-center gap-2'>
         <span className='text-lg font-semibold text-primary'>CV Online</span>
       </Link>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant='outline'
-            size='icon'
-            className='w-fit rounded-full flex gap-2 items-center pl-1 pr-1.5 hover:bg-transparent border border-transparent hover:border-primary/50'
-          >
-            <div className='h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center'>
-              <UserIcon className='w-6 h-6 text-slate-800' />
-            </div>
-            <div className='text-left'>
-              <p className='text-slate-800'>{user?.username || ''}</p>
-            </div>
-            <ChevronDown />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='px-2 pb-2'>
-          <DropdownMenuItem>
-            <button
-              className='flex gap-2 items-center'
-              onClick={() => {
-                props.setOpen(true)
-              }}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant='outline'
+              size='icon'
+              className='w-fit rounded-full flex gap-2 items-center pl-1 pr-1.5 hover:bg-transparent border border-transparent hover:border-primary/50'
             >
-              <UserIcon className='h-4 w-4' />
-              <span>Account</span>
-            </button>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className={buttonVariants({
-              variant: 'destructive',
-              className: 'w-full',
-            })}
-          >
-            <button className='flex gap-2 items-center' onClick={onLogout}>
-              <LogOutIcon className='h-4 w-4' />
-              <span>Logout</span>
-            </button>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+              <div className='h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center'>
+                <UserIcon className='w-6 h-6 text-slate-800' />
+              </div>
+              <div className='text-left'>
+                <p className='text-slate-800'>{user?.username || 'user'}</p>
+              </div>
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='px-2 pb-2'>
+            <DropdownMenuItem>
+              <button
+                className='flex gap-2 items-center'
+                onClick={() => {
+                  props.setOpen(true)
+                }}
+              >
+                <UserIcon className='h-4 w-4' />
+                <span>Account</span>
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className={buttonVariants({
+                variant: 'destructive',
+                className: 'w-full',
+              })}
+            >
+              <button className='flex gap-2 items-center' onClick={onLogout}>
+                <LogOutIcon className='h-4 w-4' />
+                <span>Logout</span>
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
     </header>
   )
 }

@@ -5,7 +5,8 @@ import { PATHS } from '@/constant/_paths'
 import { cn } from '@/utils/cn'
 import { useAtom, useAtomValue } from 'jotai'
 import { resumeAtom } from '.'
-import { useCreateResume } from '@/hooks/api/use-resume'
+import { useCreateResume, useUpdateResume } from '@/hooks/api/use-resume'
+import { Resume } from '@/types/resume'
 
 export default function Layout({
   children,
@@ -24,12 +25,18 @@ export function Navbar() {
   const [url, _] = useUrlState<{ id: string }>()
 
   const { mutate: createResume } = useCreateResume()
+  const { mutate: updateResume } = useUpdateResume(Number(url.id))
 
   const resume = useAtomValue(resumeAtom)
 
   const onCancel = () => navigate(PATHS.DASHBOARD)
   const onSave = () => {
     if (url.id) {
+      updateResume(resume as Resume & { id: number }, {
+        onSuccess: () => {
+          navigate(PATHS.DASHBOARD)
+        },
+      })
       return
     }
     createResume(resume, {

@@ -46,10 +46,14 @@ export function BasicForm() {
       form.setValue('contact.phone', resume?.contact?.phone || '')
       form.setValue('contact.email', resume?.contact?.email || '')
       form.setValue('contact.linkedin', resume?.contact?.linkedin || '')
-      form.setValue('contact.portofolioWeb', resume?.contact?.portofolioWeb || '')
+      form.setValue(
+        'contact.portofolioWeb',
+        resume?.contact?.portofolioWeb || ''
+      )
 
       setLoaded(true)
     }
+    return () => setLoaded(false)
   }, [resume, loaded])
 
   useEffect(() => {
@@ -231,6 +235,8 @@ export function EducationForm() {
       form.reset({ education: resume.education })
       setLoaded(true)
     }
+
+    return () => setLoaded(false)
   }, [resume, loaded])
 
   useEffect(() => {
@@ -401,6 +407,8 @@ export function ExperienceForm() {
       form.reset({ experience: resume.experience })
       setLoaded(true)
     }
+
+    return () => setLoaded(false)
   }, [resume, loaded])
 
   useEffect(() => {
@@ -574,10 +582,17 @@ export function PortfolioForm() {
   }
 
   useEffect(() => {
-    if (!loaded && resume && resume.portofolio && resume.portofolio.length > 0) {
+    if (
+      !loaded &&
+      resume &&
+      resume.portofolio &&
+      resume.portofolio.length > 0
+    ) {
       form.reset({ portofolio: resume.portofolio })
       setLoaded(true)
     }
+
+    return () => setLoaded(false)
   }, [resume, loaded])
 
   useEffect(() => {

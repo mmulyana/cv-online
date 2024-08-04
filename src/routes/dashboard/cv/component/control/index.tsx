@@ -48,7 +48,7 @@ export default function Control() {
         },
       },
       {
-        name: 'Porfolio',
+        name: 'Portfolio',
         state: 'portfolio',
         icon: <Presentation className='w-4 h-4 opacity-50' />,
         onClick: () => {

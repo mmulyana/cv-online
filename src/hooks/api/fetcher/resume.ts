@@ -7,7 +7,7 @@ export const createResumeFetcher = async (payload: createPayload) => {
 }
 
 export const updateResumeFetcher = async (payload: updatePayload) => {
-  return await http.post(`${URLS.RESUME}/${payload.id}`, payload)
+  return await http.put(`${URLS.RESUME}/${payload.id}`, payload)
 }
 
 export const getResumesFetcher = async () => {

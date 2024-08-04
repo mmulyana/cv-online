@@ -43,9 +43,9 @@ export default function BasicCV({ data }: Props) {
               </a>
             )}
             <div className='flex justify-end gap-2 text-xs text-gray-400'>
-              {!!exp?.start_date && <>{format(exp.start_date, 'd MMM yy')}</>}
+              {!!exp?.startDate && <>{format(exp.startDate, 'd MMM yy')}</>}
               {' - '}
-              {!!exp?.end_date && <>{format(exp.end_date, 'd MMM yy')}</>}
+              {!!exp?.endDate && <>{format(exp.endDate, 'd MMM yy')}</>}
             </div>
           </div>
           {!!exp?.description && (
@@ -66,9 +66,9 @@ export default function BasicCV({ data }: Props) {
               <p className='text-sm text-gray-800 text-center'>{item.school}</p>
             )}
             <div className='flex justify-end gap-2 text-xs text-gray-400'>
-              {!!item?.start_date && <>{format(item.start_date, 'd MMM yy')}</>}
+              {!!item?.startDate && <>{format(item.startDate, 'd MMM yy')}</>}
               {' - '}
-              {!!item?.end_date && <>{format(item.end_date, 'd MMM yy')}</>}
+              {!!item?.endDate && <>{format(item.endDate, 'd MMM yy')}</>}
             </div>
           </div>
           {!!item?.description && (
@@ -79,7 +79,7 @@ export default function BasicCV({ data }: Props) {
       <div className='border-b border-gray-200 pb-0.5 mt-3 text-xs'>
         Portfolios
       </div>
-      {data?.portfolio?.map((item: any, index) => (
+      {data?.portofolio?.map((item: any, index) => (
         <div key={index} className='mt-1.5'>
           <div className='flex justify-between items-center relative'>
             <div>
@@ -93,9 +93,9 @@ export default function BasicCV({ data }: Props) {
               )}
             </div>
             <div className='flex justify-end gap-2 text-xs text-gray-400'>
-              {!!item?.start_date && <>{format(item.start_date, 'd MMM yy')}</>}
+              {!!item?.startDate && <>{format(item.startDate, 'd MMM yy')}</>}
               {' - '}
-              {!!item?.end_date && <>{format(item.end_date, 'd MMM yy')}</>}
+              {!!item?.endDate && <>{format(item.endDate, 'd MMM yy')}</>}
             </div>
           </div>
           {!!item?.description && (

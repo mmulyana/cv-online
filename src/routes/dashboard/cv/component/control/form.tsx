@@ -1,5 +1,4 @@
 import { educationSchema, experienceSchema, portfolioSchema } from './schema'
-import { resumeAtom, isResumeChangedAtom } from '../..'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
@@ -12,11 +11,12 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form'
+import { useEffect, useMemo, useState } from 'react'
 import InputDate from '@/components/common/Input-date'
 import { Input } from '@/components/ui/input'
-import { useAtom, useSetAtom } from 'jotai'
-import { useEffect, useMemo, useState } from 'react'
 import { Resume } from '@/types/resume'
+import { resumeAtom } from '../..'
+import { useAtom } from 'jotai'
 import { z } from 'zod'
 
 export function BasicForm() {
@@ -30,23 +30,23 @@ export function BasicForm() {
         email: '',
         linkedin: '',
         phone: '',
-        portfolioWeb: '',
+        portofolioWeb: '',
       },
     },
   })
   const [loaded, setLoaded] = useState(false)
   const [resume, setResume] = useAtom(resumeAtom)
-  const setResumeHasChanged = useSetAtom(isResumeChangedAtom)
 
   useEffect(() => {
     if (!loaded && resume) {
       form.setValue('name', resume?.name || '')
-      form.setValue('description', resume?.description || '')
       form.setValue('address', resume?.address || '')
-      form.setValue('contact.email', resume?.contact.email || '')
-      form.setValue('contact.phone', resume?.contact.phone || '')
-      form.setValue('contact.email', resume?.contact.email || '')
-      form.setValue('contact.portfolioWeb', resume?.contact.portofolioWeb || '')
+      form.setValue('description', resume?.description || '')
+      form.setValue('contact.email', resume?.contact?.email || '')
+      form.setValue('contact.phone', resume?.contact?.phone || '')
+      form.setValue('contact.email', resume?.contact?.email || '')
+      form.setValue('contact.linkedin', resume?.contact?.linkedin || '')
+      form.setValue('contact.portofolioWeb', resume?.contact?.portofolioWeb || '')
 
       setLoaded(true)
     }
@@ -63,7 +63,6 @@ export function BasicForm() {
       } as Partial<Resume>
 
       setResume((prev) => ({ ...prev!, ...payload }))
-      setResumeHasChanged(true)
     })
 
     return () => subscription.unsubscribe()
@@ -170,7 +169,7 @@ export function BasicForm() {
 
         <FormField
           control={form.control}
-          name='contact.portfolioWeb'
+          name='contact.portofolioWeb'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Website or portfolio</FormLabel>
@@ -197,8 +196,8 @@ export function EducationForm() {
           title: '',
           school: '',
           description: '',
-          start_date: '',
-          end_date: '',
+          startDate: '',
+          endDate: '',
         },
       ],
     },
@@ -219,10 +218,10 @@ export function EducationForm() {
   ) => {
     if (selectedDate) {
       const date = new Date(selectedDate)
-      if (type == 'start_date') {
-        form.setValue(`education.${index}.start_date`, date.toISOString())
+      if (type == 'startDate') {
+        form.setValue(`education.${index}.startDate`, date.toISOString())
       } else {
-        form.setValue(`education.${index}.end_date`, date.toISOString())
+        form.setValue(`education.${index}.endDate`, date.toISOString())
       }
     }
   }
@@ -256,8 +255,8 @@ export function EducationForm() {
                 title: '',
                 description: '',
                 school: '',
-                start_date: '',
-                end_date: '',
+                startDate: '',
+                endDate: '',
               })
             }
           >
@@ -305,31 +304,33 @@ export function EducationForm() {
             <div className='grid grid-cols-2 gap-4'>
               <div>
                 <FormLabel
-                  htmlFor={`education.${index}.start_date`}
+                  htmlFor={`education.${index}.startDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   Start Date
                 </FormLabel>
                 <InputDate
-                  name={`education.${index}.start_date`}
+                  name={`education.${index}.startDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
+                  type='startDate'
                 />
               </div>
+
               <div>
                 <FormLabel
-                  htmlFor={`education.${index}.end_date`}
+                  htmlFor={`education.${index}.endDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   End Date
                 </FormLabel>
                 <InputDate
-                  name={`education.${index}.end_date`}
+                  name={`education.${index}.endDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
-                  type='end_date'
+                  type='endDate'
                 />
               </div>
             </div>
@@ -354,7 +355,16 @@ export function ExperienceForm() {
   const form = useForm<z.infer<typeof experienceSchema>>({
     resolver: zodResolver(experienceSchema),
     defaultValues: {
-      experience: [],
+      experience: [
+        {
+          title: '',
+          description: '',
+          company: '',
+          startDate: '',
+          endDate: '',
+          link: '',
+        },
+      ],
     },
   })
 
@@ -373,10 +383,10 @@ export function ExperienceForm() {
   ) => {
     if (selectedDate) {
       const date = new Date(selectedDate)
-      if (type == 'start_date') {
-        form.setValue(`experience.${index}.start_date`, date.toISOString())
+      if (type == 'startDate') {
+        form.setValue(`experience.${index}.startDate`, date.toISOString())
       } else {
-        form.setValue(`experience.${index}.end_date`, date.toISOString())
+        form.setValue(`experience.${index}.endDate`, date.toISOString())
       }
     }
   }
@@ -416,8 +426,8 @@ export function ExperienceForm() {
                 title: '',
                 description: '',
                 company: '',
-                start_date: '',
-                end_date: '',
+                startDate: '',
+                endDate: '',
                 link: '',
               })
             }
@@ -478,31 +488,32 @@ export function ExperienceForm() {
             <div className='grid grid-cols-2 gap-4'>
               <div>
                 <FormLabel
-                  htmlFor={`experience.${index}.start_date`}
+                  htmlFor={`experience.${index}.startDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   Start Date
                 </FormLabel>
                 <InputDate
-                  name={`experience.${index}.start_date`}
+                  name={`experience.${index}.startDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
+                  type='startDate'
                 />
               </div>
               <div>
                 <FormLabel
-                  htmlFor={`experience.${index}.end_date`}
+                  htmlFor={`experience.${index}.endDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   End Date
                 </FormLabel>
                 <InputDate
-                  name={`experience.${index}.end_date`}
+                  name={`experience.${index}.endDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
-                  type='end_date'
+                  type='endDate'
                 />
               </div>
             </div>
@@ -526,13 +537,13 @@ export function PortfolioForm() {
   const form = useForm<z.infer<typeof portfolioSchema>>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
-      portfolio: [
+      portofolio: [
         {
           title: '',
           role: '',
           description: '',
-          start_date: '',
-          end_date: '',
+          startDate: '',
+          endDate: '',
           link: '',
         },
       ],
@@ -540,7 +551,7 @@ export function PortfolioForm() {
   })
 
   const { fields, append, remove } = useFieldArray({
-    name: 'portfolio',
+    name: 'portofolio',
     control: form.control,
   })
 
@@ -554,25 +565,25 @@ export function PortfolioForm() {
   ) => {
     if (selectedDate) {
       const date = new Date(selectedDate)
-      if (type == 'start_date') {
-        form.setValue(`portfolio.${index}.start_date`, date.toISOString())
+      if (type == 'startDate') {
+        form.setValue(`portofolio.${index}.startDate`, date.toISOString())
       } else {
-        form.setValue(`portfolio.${index}.end_date`, date.toISOString())
+        form.setValue(`portofolio.${index}.endDate`, date.toISOString())
       }
     }
   }
 
   useEffect(() => {
-    if (!loaded && resume && resume.portfolio && resume.portfolio.length > 0) {
-      form.reset({ portfolio: resume.portfolio })
+    if (!loaded && resume && resume.portofolio && resume.portofolio.length > 0) {
+      form.reset({ portofolio: resume.portofolio })
       setLoaded(true)
     }
   }, [resume, loaded])
 
   useEffect(() => {
     const subscription = form.watch((data: any) => {
-      const portfolio = [...data.portfolio]
-      setResume((prev) => ({ ...prev!, portfolio }))
+      const portofolio = [...data.portofolio]
+      setResume((prev) => ({ ...prev!, portofolio }))
     })
 
     return () => subscription.unsubscribe()
@@ -592,8 +603,8 @@ export function PortfolioForm() {
                 title: '',
                 role: '',
                 description: '',
-                start_date: '',
-                end_date: '',
+                startDate: '',
+                endDate: '',
                 link: '',
               })
             }
@@ -605,80 +616,81 @@ export function PortfolioForm() {
           <div key={index} className='flex flex-col gap-2'>
             <div>
               <FormLabel
-                htmlFor={`portfolio.${index}.title`}
+                htmlFor={`portofolio.${index}.title`}
                 className='text-xs font-normal text-gray-500'
               >
                 Title
               </FormLabel>
               <Input
                 placeholder='title'
-                {...form.register(`portfolio.${index}.title`)}
+                {...form.register(`portofolio.${index}.title`)}
               />
             </div>
             <div>
               <FormLabel
-                htmlFor={`portfolio.${index}.role`}
+                htmlFor={`portofolio.${index}.role`}
                 className='text-xs font-normal text-gray-500'
               >
                 Role
               </FormLabel>
               <Input
                 placeholder='role'
-                {...form.register(`portfolio.${index}.role`)}
+                {...form.register(`portofolio.${index}.role`)}
               />
             </div>
             <div>
               <FormLabel
-                htmlFor={`portfolio.${index}.link`}
+                htmlFor={`portofolio.${index}.link`}
                 className='text-xs font-normal text-gray-500'
               >
                 Link
               </FormLabel>
               <Input
                 placeholder='link'
-                {...form.register(`portfolio.${index}.link`)}
+                {...form.register(`portofolio.${index}.link`)}
               />
             </div>
             <div>
               <FormLabel
-                htmlFor={`portfolio.${index}.description`}
+                htmlFor={`portofolio.${index}.description`}
                 className='text-xs font-normal text-gray-500'
               >
                 Description
               </FormLabel>
               <Textarea
                 placeholder='description'
-                {...form.register(`portfolio.${index}.description`)}
+                {...form.register(`portofolio.${index}.description`)}
               />
             </div>
             <div className='grid grid-cols-2 gap-4'>
               <div>
                 <FormLabel
-                  htmlFor={`portfolio.${index}.start_date`}
+                  htmlFor={`portofolio.${index}.startDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   Start Date
                 </FormLabel>
                 <InputDate
-                  name={`portfolio.${index}.start_date`}
+                  name={`portofolio.${index}.startDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
+                  type='startDate'
                 />
               </div>
               <div>
                 <FormLabel
-                  htmlFor={`portfolio.${index}.end_date`}
+                  htmlFor={`portofolio.${index}.endDate`}
                   className='text-xs font-normal text-gray-500'
                 >
                   End Date
                 </FormLabel>
                 <InputDate
-                  name={`portfolio.${index}.end_date`}
+                  name={`portofolio.${index}.endDate`}
                   control={form.control}
                   handleSelect={handleDateSelect}
                   index={index}
-                  type='end_date'
+                  type='endDate'
                 />
               </div>
             </div>

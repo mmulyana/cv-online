@@ -2,8 +2,8 @@ type Experiences = {
   title: string
   company: string
   description: string
-  start_date: string
-  end_date: string
+  startDate: string
+  endDate: string
   link: string
 }
 
@@ -11,16 +11,16 @@ type Educations = {
   title: string
   school: string
   description: string
-  start_date: string
-  end_date: string
+  startDate: string
+  endDate: string
 }
 
 type Portfolios = {
   title: string
   role: string
   description: string
-  start_date: string
-  end_date: string
+  startDate: string
+  endDate: string
   link: string
 }
 
@@ -45,6 +45,6 @@ export type Resume = {
   contact: Partial<Contact>
   experience: Partial<Experiences[]>
   education: Partial<Educations[]>
-  portfolio: Partial<Portfolios[]>
+  portofolio: Partial<Portfolios[]>
   skills: Partial<Skills[]>
 }

@@ -1,4 +1,4 @@
-import Layout from '@/routes/dashboard/layout'
+import Layout from '../layout'
 import Control from './control'
 import {
   ResizableHandle,

@@ -61,5 +61,6 @@ export const useResumeById = (id: number) => {
   return useQuery({
     queryFn: () => getResumeByIdFetcher(id),
     queryKey: [KEYS.RESUME, id],
+    enabled: !!id,
   })
 }

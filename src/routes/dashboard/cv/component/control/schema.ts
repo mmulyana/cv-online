@@ -8,7 +8,7 @@ export const basicSchema = z.object({
   contact: z
     .object({
       email: z.string().optional(),
-      portfolioWeb: z.string().optional(),
+      portofolioWeb: z.string().optional(),
       linkedin: z.string().optional(),
       phone: z.string().optional(),
     })
@@ -21,8 +21,8 @@ export const educationSchema = z.object({
       title: z.string().optional(),
       school: z.string().optional(),
       description: z.string().optional(),
-      start_date: z.string().date().optional(),
-      end_date: z.string().date().optional(),
+      startDate: z.string().date().optional(),
+      endDate: z.string().date().optional(),
     })
     .array()
     .optional(),
@@ -34,8 +34,8 @@ export const experienceSchema = z.object({
       title: z.string().optional(),
       company: z.string().optional(),
       description: z.string().optional(),
-      start_date: z.string().date().optional(),
-      end_date: z.string().date().optional(),
+      startDate: z.string().date().optional(),
+      endDate: z.string().date().optional(),
       link: z.string().optional(),
     })
     .array()
@@ -43,13 +43,13 @@ export const experienceSchema = z.object({
 })
 
 export const portfolioSchema = z.object({
-  portfolio: z
+  portofolio: z
     .object({
       title: z.string(),
       role: z.string(),
       description: z.string(),
-      start_date: z.string().date(),
-      end_date: z.string().date(),
+      startDate: z.string().date(),
+      endDate: z.string().date(),
       link: z.string(),
     })
     .array()

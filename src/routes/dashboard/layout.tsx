@@ -70,7 +70,7 @@ export function Navbar(props: NavbarProps) {
                 <UserIcon className='w-6 h-6 text-slate-800' />
               </div>
               <div className='text-left'>
-                <p className='text-slate-800'>{user?.username || 'user'}</p>
+                <p className='text-slate-800'>{user || 'user'}</p>
               </div>
               <ChevronDown />
             </Button>
@@ -126,7 +126,7 @@ export function Profile(props: AccountProps) {
             <Label htmlFor='name' className='text-right'>
               Name
             </Label>
-            <Input id='name' defaultValue={user?.username || ''} disabled />
+            <Input id='name' defaultValue={user || ''} disabled />
           </div>
         </div>
         <DialogFooter>

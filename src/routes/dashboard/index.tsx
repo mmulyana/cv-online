@@ -6,6 +6,7 @@ import { useResumes } from '@/hooks/api/use-resume'
 import { useMemo } from 'react'
 import { Resume } from '@/types/resume'
 import CvImage from '/cv.png'
+import { Eye } from 'lucide-react'
 
 export default function Page() {
   const { data, isLoading } = useResumes()
@@ -38,7 +39,7 @@ function EmptyResume() {
 }
 
 type Props = {
-  data: Resume & { id: string }[]
+  data: Resume & { id: string; status: 'DRAFT' | 'PUBLIC' }[]
 }
 function MyResume(props: Props) {
   const navigate = useNavigate()
@@ -54,17 +55,23 @@ function MyResume(props: Props) {
           Buat CV
         </Link>
       </div>
-      <div className='grid grid-cols-4 gap-6'>
+      <div className='grid grid-cols-4 gap-8'>
         {props.data?.map((resume) => (
           <div
             key={resume.id}
-            className='flex flex-col justify-center items-center'
+            className='flex flex-col justify-center items-center relative'
           >
             <img src={CvImage} alt='cv' className='w-20 h-auto' />
-            <div className='flex gap-2 items-center mt-4'>
+            {resume.status == 'PUBLIC' && (
+              <div className='absolute top-28 left-1/2 -translate-x-1/2 flex gap-1 items-center'>
+                <Eye className='w-4 h-4' />
+                <p className='text-sm'>Public CV</p>
+              </div>
+            )}
+            <div className='flex gap-2 items-center mt-8'>
               <Button
                 size='sm'
-                className='bg-white'
+                className='bg-white text-xs px-2 py-1.5 h-fit rounded'
                 variant='secondary'
                 onClick={() =>
                   navigate(`${PATHS.DASHBOARD_RESUME}?id=${resume.id}`)
@@ -72,8 +79,25 @@ function MyResume(props: Props) {
               >
                 Edit
               </Button>
-              <Button size='sm' className='bg-amber-400' variant='secondary'>
+              <Button
+                size='sm'
+                className='bg-amber-400 text-xs px-2 py-1.5 h-fit rounded'
+                variant='secondary'
+                onClick={() =>
+                  navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
+                }
+              >
                 Publish
+              </Button>
+              <Button
+                size='sm'
+                variant='destructive'
+                className='text-xs px-2 py-1.5 h-fit rounded'
+                onClick={() =>
+                  navigate(`${PATHS.DASHBOARD}?delete=${resume.id}`)
+                }
+              >
+                Delete
               </Button>
             </div>
           </div>

@@ -62,6 +62,8 @@ function MyResume(props: Props) {
             className='flex flex-col justify-center items-center relative'
           >
             <img src={CvImage} alt='cv' className='w-20 h-auto' />
+            {/* temporary will be remove in future */}
+            <p className='left-24 top-1 absolute text-white text-sm'>CV: {resume.id}</p>
             {resume.status == 'PUBLIC' && (
               <div className='absolute top-28 left-1/2 -translate-x-1/2 flex gap-1 items-center'>
                 <Eye className='w-4 h-4' />

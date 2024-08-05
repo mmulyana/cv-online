@@ -3,8 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import {
   createResumeFetcher,
+  deleteResumeFetcher,
   getResumeByIdFetcher,
   getResumesFetcher,
+  publishResumeFetcher,
   updateResumeFetcher,
 } from './fetcher/resume'
 import { toast } from 'sonner'
@@ -46,6 +48,36 @@ export const useUpdateResume = (id: number) => {
     onSuccess: (data) => {
       toast.success(data.data.data)
       queryClient.invalidateQueries({ queryKey: [KEYS.RESUME, id] })
+    },
+  })
+}
+
+export const useDeleteResume = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation<AxiosResponse<Response>, Error, updatePayload>({
+    mutationFn: deleteResumeFetcher,
+    onError: (err) => {
+      toast.error(err.message)
+    },
+    onSuccess: (data) => {
+      toast.success(data.data.data)
+      queryClient.invalidateQueries({ queryKey: [KEYS.RESUME] })
+    },
+  })
+}
+
+export const usePublishResume = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation<AxiosResponse<Response>, Error, updatePayload>({
+    mutationFn: publishResumeFetcher,
+    onError: (err) => {
+      toast.error(err.message)
+    },
+    onSuccess: (data) => {
+      toast.success(data.data.data)
+      queryClient.invalidateQueries({ queryKey: [KEYS.RESUME] })
     },
   })
 }

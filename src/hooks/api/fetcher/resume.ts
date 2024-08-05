@@ -17,3 +17,15 @@ export const getResumesFetcher = async () => {
 export const getResumeByIdFetcher = async (id: number) => {
   return await http(`${URLS.RESUME}/${id}`)
 }
+
+export const deleteResumeFetcher = async ({ id }: { id: number }) => {
+  return await http.delete(`${URLS.RESUME}/${id}`)
+}
+
+export const publishResumeFetcher = async ({ id }: { id: number }) => {
+  return await http.patch(`${URLS.RESUME}/publish/${id}`)
+}
+
+export const getPublicResumeFetcher = async ({ id }: { id: number }) => {
+  return await http(`${URLS.RESUME}/publish/${id}`)
+}

@@ -6,7 +6,14 @@ import { useResumes } from '@/hooks/api/use-resume'
 import { useMemo } from 'react'
 import { Resume } from '@/types/resume'
 import CvImage from '/cv.png'
-import { Eye } from 'lucide-react'
+import { EllipsisVerticalIcon, Eye } from 'lucide-react'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
 
 export default function Page() {
   const { data, isLoading } = useResumes()
@@ -38,8 +45,9 @@ function EmptyResume() {
   )
 }
 
+type Resumes = Resume & { id: string; status: 'DRAFT' | 'PUBLIC' }
 type Props = {
-  data: Resume & { id: string; status: 'DRAFT' | 'PUBLIC' }[]
+  data: Resumes[]
 }
 function MyResume(props: Props) {
   const navigate = useNavigate()
@@ -47,7 +55,14 @@ function MyResume(props: Props) {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex justify-between items-center'>
-        <p>My Resume</p>
+        <div className='flex items-center gap-1'>
+          <p>Resume</p>
+          <div className='h-5 w-5 rounded-full bg-gray-700 relative'>
+            <p className='text-white text-xs absolute top-1/2 left-[45%] -translate-x-1/2 -translate-y-1/2'>
+              {props.data.length}
+            </p>
+          </div>
+        </div>
         <Link
           className={buttonVariants({ variant: 'default' })}
           to={PATHS.DASHBOARD_RESUME}
@@ -59,48 +74,49 @@ function MyResume(props: Props) {
         {props.data?.map((resume) => (
           <div
             key={resume.id}
-            className='flex flex-col justify-center items-center relative'
+            className='flex flex-col justify-center items-center relative bg-gray-200 rounded border border-gray-300/50 h-40 overflow-hidden'
           >
-            <img src={CvImage} alt='cv' className='w-20 h-auto' />
-            {/* temporary will be remove in future */}
-            <p className='left-24 top-1 absolute text-white text-sm'>CV: {resume.id}</p>
             {resume.status == 'PUBLIC' && (
-              <div className='absolute top-28 left-1/2 -translate-x-1/2 flex gap-1 items-center'>
-                <Eye className='w-4 h-4' />
-                <p className='text-sm'>Public CV</p>
+              <div className='flex gap-0.5 items-center absolute top-2 right-2 bg-white px-1 pr-1.5 py-0.5 rounded shadow-md'>
+                <Eye className='w-4 h-4 text-gray-600' />
+                <p className='text-xs text-gray-400'>Public CV</p>
               </div>
             )}
-            <div className='flex gap-2 items-center mt-8'>
-              <Button
-                size='sm'
-                className='bg-white text-xs px-2 py-1.5 h-fit rounded'
-                variant='secondary'
-                onClick={() =>
-                  navigate(`${PATHS.DASHBOARD_RESUME}?id=${resume.id}`)
-                }
-              >
-                Edit
-              </Button>
-              <Button
-                size='sm'
-                className='bg-amber-400 text-xs px-2 py-1.5 h-fit rounded'
-                variant='secondary'
-                onClick={() =>
-                  navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
-                }
-              >
-                Publish
-              </Button>
-              <Button
-                size='sm'
-                variant='destructive'
-                className='text-xs px-2 py-1.5 h-fit rounded'
-                onClick={() =>
-                  navigate(`${PATHS.DASHBOARD}?delete=${resume.id}`)
-                }
-              >
-                Delete
-              </Button>
+            <div className='flex gap-2 items-center justify-between absolute left-0 bottom-0 w-full bg-white h-14 px-2'>
+              <div>
+                <p className='text-xs text-gray-800'>{resume.name}</p>
+                <p className='text-xs text-gray-400'>{resume.description}</p>
+              </div>
+              <Menubar>
+                <MenubarMenu>
+                  <MenubarTrigger className='h-5 w-5 rounded bg-white hover:shadow-md hover:border border-gray-200 flex justify-center items-center'>
+                    <EllipsisVerticalIcon className='w-4' />
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem
+                      onClick={() =>
+                        navigate(`${PATHS.DASHBOARD_RESUME}?id=${resume.id}`)
+                      }
+                    >
+                      Edit
+                    </MenubarItem>
+                    <MenubarItem
+                      onClick={() =>
+                        navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
+                      }
+                    >
+                      Publish
+                    </MenubarItem>
+                    <MenubarItem
+                      onClick={() =>
+                        navigate(`${PATHS.DASHBOARD}?delete=${resume.id}`)
+                      }
+                    >
+                      Delete
+                    </MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
+              </Menubar>
             </div>
           </div>
         ))}

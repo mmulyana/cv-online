@@ -11,7 +11,6 @@ import {
   Eye,
   ForwardIcon,
   PencilIcon,
-  Share2Icon,
   Trash,
 } from 'lucide-react'
 import {
@@ -101,39 +100,47 @@ function MyResume(props: Props) {
                   </MenubarTrigger>
                   <MenubarContent>
                     <MenubarItem
-                      className='h-fit px-1.5 rounded hover:bg-blue-100 text-gray-500 hover:text-blue-500 cursor-pointer flex gap-1.5'
+                      className='p-0'
                       onClick={() =>
                         navigate(`${PATHS.DASHBOARD_RESUME}?id=${resume.id}`)
                       }
                     >
-                      <PencilIcon className='w-4' />
-                      <p>Edit</p>
+                      <button className='h-fit w-full py-1 px-1.5 rounded hover:bg-blue-100 text-gray-500 hover:text-blue-500 cursor-pointer flex items-center gap-1.5'>
+                        <PencilIcon className='w-4' />
+                        <p>Edit</p>
+                      </button>
                     </MenubarItem>
                     {resume.status == 'PUBLIC' ? (
-                      <MenubarItem className='h-fit px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex gap-1.5'>
-                        <ForwardIcon className='w-4' />
-                        <p>Share</p>
+                      <MenubarItem className='p-0'>
+                        <button className='h-fit w-full py-1 px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex items-center gap-1.5'>
+                          <ForwardIcon className='w-4' />
+                          <p>Share</p>
+                        </button>
                       </MenubarItem>
                     ) : (
                       <MenubarItem
-                        className='h-fit px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex gap-1.5'
+                        className='p-0'
                         onClick={() =>
                           navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
                         }
                       >
-                        <Eye className='w-4' />
-                        <p>Publish</p>
+                        <button className='h-fit w-full py-1 px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex items-center gap-1.5'>
+                          <Eye className='w-4' />
+                          <p>Publish</p>
+                        </button>
                       </MenubarItem>
                     )}
 
                     <MenubarItem
-                      className='h-fit px-1.5 rounded hover:bg-red-100 text-gray-500 hover:text-red-500 cursor-pointer flex gap-1.5'
+                      className='p-0'
                       onClick={() =>
                         navigate(`${PATHS.DASHBOARD}?delete=${resume.id}`)
                       }
                     >
-                      <Trash className='w-4' />
-                      <p>Delete</p>
+                      <button className='h-fit w-full py-1 px-1.5 rounded hover:bg-red-100 text-gray-500 hover:text-red-500 cursor-pointer flex items-center gap-1.5'>
+                        <Trash className='w-4' />
+                        <p>Delete</p>
+                      </button>
                     </MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>

@@ -6,7 +6,14 @@ import { useResumes } from '@/hooks/api/use-resume'
 import { useMemo } from 'react'
 import { Resume } from '@/types/resume'
 import CvImage from '/cv.png'
-import { EllipsisVerticalIcon, Eye } from 'lucide-react'
+import {
+  EllipsisVerticalIcon,
+  Eye,
+  ForwardIcon,
+  PencilIcon,
+  Share2Icon,
+  Trash,
+} from 'lucide-react'
 import {
   Menubar,
   MenubarContent,
@@ -89,30 +96,44 @@ function MyResume(props: Props) {
               </div>
               <Menubar>
                 <MenubarMenu>
-                  <MenubarTrigger className='h-5 w-5 rounded bg-white hover:shadow-md hover:border border-gray-200 flex justify-center items-center'>
+                  <MenubarTrigger className='h-fit px-1.5 rounded bg-white hover:shadow-md border border-transparent hover:border-gray-200 flex justify-center items-center'>
                     <EllipsisVerticalIcon className='w-4' />
                   </MenubarTrigger>
                   <MenubarContent>
                     <MenubarItem
+                      className='h-fit px-1.5 rounded hover:bg-blue-100 text-gray-500 hover:text-blue-500 cursor-pointer flex gap-1.5'
                       onClick={() =>
                         navigate(`${PATHS.DASHBOARD_RESUME}?id=${resume.id}`)
                       }
                     >
-                      Edit
+                      <PencilIcon className='w-4' />
+                      <p>Edit</p>
                     </MenubarItem>
+                    {resume.status == 'PUBLIC' ? (
+                      <MenubarItem className='h-fit px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex gap-1.5'>
+                        <ForwardIcon className='w-4' />
+                        <p>Share</p>
+                      </MenubarItem>
+                    ) : (
+                      <MenubarItem
+                        className='h-fit px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex gap-1.5'
+                        onClick={() =>
+                          navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
+                        }
+                      >
+                        <Eye className='w-4' />
+                        <p>Publish</p>
+                      </MenubarItem>
+                    )}
+
                     <MenubarItem
-                      onClick={() =>
-                        navigate(`${PATHS.DASHBOARD}?publish=${resume.id}`)
-                      }
-                    >
-                      Publish
-                    </MenubarItem>
-                    <MenubarItem
+                      className='h-fit px-1.5 rounded hover:bg-red-100 text-gray-500 hover:text-red-500 cursor-pointer flex gap-1.5'
                       onClick={() =>
                         navigate(`${PATHS.DASHBOARD}?delete=${resume.id}`)
                       }
                     >
-                      Delete
+                      <Trash className='w-4' />
+                      <p>Delete</p>
                     </MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>

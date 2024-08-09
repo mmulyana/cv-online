@@ -1,6 +1,6 @@
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { PATHS } from '@/constant/_paths'
-import { generatePath, Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from './layout'
 import { useResumes } from '@/hooks/api/use-resume'
 import { useMemo } from 'react'
@@ -20,6 +20,8 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { BASE_URL } from '@/constant/_base'
+import { toast } from 'sonner'
 
 export default function Page() {
   const { data, isLoading } = useResumes()
@@ -112,7 +114,18 @@ function MyResume(props: Props) {
                     </MenubarItem>
                     {resume.status == 'PUBLIC' ? (
                       <MenubarItem className='p-0'>
-                        <button className='h-fit w-full py-1 px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex items-center gap-1.5'>
+                        <button
+                          className='h-fit w-full py-1 px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex items-center gap-1.5'
+                          onClick={async () => {
+                            try {
+                              const url = `${BASE_URL}/cv/${resume.id}`
+                              await navigator.clipboard.writeText(url)
+                              toast.success('Copied! Share the link anywhere.')
+                            } catch (error) {
+                              toast.error(error)
+                            }
+                          }}
+                        >
                           <ForwardIcon className='w-4' />
                           <p>Share</p>
                         </button>

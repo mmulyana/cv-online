@@ -116,14 +116,10 @@ function MyResume(props: Props) {
                       <MenubarItem className='p-0'>
                         <button
                           className='h-fit w-full py-1 px-1.5 rounded hover:bg-orange-100 text-gray-500 hover:text-orange-500 cursor-pointer flex items-center gap-1.5'
-                          onClick={async () => {
-                            try {
-                              const url = `${BASE_URL}/cv/${resume.id}`
-                              await navigator.clipboard.writeText(url)
-                              toast.success('Copied! Share the link anywhere.')
-                            } catch (error) {
-                              toast.error(error)
-                            }
+                          onClick={() => {
+                            const url = `${BASE_URL}/cv/${resume.id}`
+                            navigator.clipboard.writeText(url)
+                            toast.success('Copied! Share the link anywhere.')
                           }}
                         >
                           <ForwardIcon className='w-4' />

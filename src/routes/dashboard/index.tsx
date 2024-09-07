@@ -1,11 +1,10 @@
 import { buttonVariants } from '@/components/ui/button'
 import { PATHS } from '@/constant/_paths'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, generatePath } from 'react-router-dom'
 import Layout from './layout'
 import { useResumes } from '@/hooks/api/use-resume'
 import { useMemo } from 'react'
 import { Resume } from '@/types/resume'
-import CvImage from '/cv.png'
 import {
   EllipsisVerticalIcon,
   Eye,
@@ -85,10 +84,15 @@ function MyResume(props: Props) {
             className='flex flex-col justify-center items-center relative bg-gray-200 rounded border border-gray-300/50 h-40 overflow-hidden'
           >
             {resume.status == 'PUBLIC' && (
-              <div className='flex gap-0.5 items-center absolute top-2 right-2 bg-white px-1 pr-1.5 py-0.5 rounded shadow-md'>
+              <button
+                className='flex gap-0.5 items-center absolute top-2 right-2 bg-white px-1 pr-1.5 py-0.5 rounded shadow-md pointer'
+                onClick={() =>
+                  navigate(generatePath(PATHS.PUBLIC, { id: resume.id }))
+                }
+              >
                 <Eye className='w-4 h-4 text-gray-600' />
                 <p className='text-xs text-gray-400'>Public CV</p>
-              </div>
+              </button>
             )}
             <div className='flex gap-2 items-center justify-between absolute left-0 bottom-0 w-full bg-white h-14 px-2'>
               <div>

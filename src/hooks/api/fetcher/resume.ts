@@ -18,6 +18,10 @@ export const getResumeByIdFetcher = async (id: number) => {
   return await http(`${URLS.RESUME}/${id}`)
 }
 
+export const getPublishResumeByIdFetcher = async (id: number) => {
+  return await http(`${URLS.RESUME}/publish/${id}`)
+}
+
 export const deleteResumeFetcher = async ({ id }: { id: number }) => {
   return await http.delete(`${URLS.RESUME}/${id}`)
 }

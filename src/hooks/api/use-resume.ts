@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios'
 import {
   createResumeFetcher,
   deleteResumeFetcher,
+  getPublishResumeByIdFetcher,
   getResumeByIdFetcher,
   getResumesFetcher,
   publishResumeFetcher,
@@ -93,6 +94,14 @@ export const useResumeById = (id: number) => {
   return useQuery({
     queryFn: () => getResumeByIdFetcher(id),
     queryKey: [KEYS.RESUME, id],
+    enabled: !!id,
+  })
+}
+
+export const useGetPublishResume = (id: number) => {
+  return useQuery({
+    queryKey: [KEYS.RESUME_PUBLISH, id],
+    queryFn: () => getPublishResumeByIdFetcher(id),
     enabled: !!id,
   })
 }
